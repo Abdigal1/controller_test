@@ -1,0 +1,41 @@
+robot:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  # Position Controllers ---------------------------------------
+  joint2_position_controller:
+    type: position_controllers/JointPositionController
+    joint: joint_2_Arm
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint3_position_controller:
+    type: position_controllers/JointPositionController
+    joint: joint_3_Arm
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+  joint4_position_controller:
+    type: position_controllers/JointPositionController
+    joint: joint_4_Arm
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  # Velocity Controllers
+  wheel1_velocity_controller:
+    type: effort_controllers/JointVelocityController
+    joint: joint_1_1_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  wheel2_velocity_controller:
+    type: effort_controllers/JointVelocityController
+    joint: joint_1_2_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  wheel3_velocity_controller:
+    type: effort_controllers/JointVelocityController
+    joint: joint_1_3_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  wheel4_velocity_controller:
+    type: effort_controllers/JointVelocityController
+    joint: joint_1_4_wheel
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+

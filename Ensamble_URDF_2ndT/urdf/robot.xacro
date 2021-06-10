@@ -1,0 +1,597 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+
+
+
+  <link name="map">
+   </link>
+  <link
+    name="base_link_Chasis">
+    <inertial>
+      <origin
+        xyz="-0.0112401823918047 0.000443693306025505 0.0601080455071435"
+        rpy="0 0 0" />
+      <mass
+        value="5.34447797641956" />
+      <inertia
+        ixx="0.0273893594112689"
+        ixy="1.69654538422057E-05"
+        ixz="-1.08762432056227E-06"
+        iyy="0.0269594894054598"
+        iyz="8.26864136660382E-08"
+        izz="0.0517209464806407" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/base_link_Chasis.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/base_link_Chasis.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Link_1_1_wheel">
+    <inertial>
+      <origin
+        xyz="5.67991416164371E-07 2.82678237431555E-06 -0.0304872070529114"
+        rpy="0 0 0" />
+      <mass
+        value="0.62241947518931" />
+      <inertia
+        ixx="0.000624907057081948"
+        ixy="-3.27878592567662E-09"
+        ixz="4.02329903687644E-11"
+        iyy="0.000624902314874052"
+        iyz="-5.11080571575358E-09"
+        izz="0.00114905854450842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_1_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_1_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+    <joint name="dummy_joint" type="fixed">
+     <parent link="map"/>
+     <child link="base_link_Chasis"/>
+   </joint>
+  <joint
+    name="joint_1_1_wheel"
+    type="continuous">
+    <origin
+      xyz="-0.12 -0.13348 0.0195"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link_Chasis" />
+    <child
+      link="Link_1_1_wheel" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="Link_1_2_wheel">
+    <inertial>
+      <origin
+        xyz="2.73809271632286E-06 -9.0341635872182E-07 -0.0321210915173856"
+        rpy="0 0 0" />
+      <mass
+        value="0.62241947518931" />
+      <inertia
+        ixx="0.00062490065579211"
+        ixy="3.60794637957165E-10"
+        ixz="4.42299708533631E-09"
+        iyy="0.00062490871616389"
+        iyz="-2.56106433818635E-09"
+        izz="0.00114905854450842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_2_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_2_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_1_2_wheel"
+    type="continuous">
+    <origin
+      xyz="-0.12 0.196084149285149 0.019499999999999"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="base_link_Chasis" />
+    <child
+      link="Link_1_2_wheel" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="Link_1_3_wheel">
+    <inertial>
+      <origin
+        xyz="2.45343850485691E-06 1.51457992322857E-06 -0.0304872070529117"
+        rpy="0 0 0" />
+      <mass
+        value="0.622419475189312" />
+      <inertia
+        ixx="0.00062490125347859"
+        ixy="-2.14254962013106E-09"
+        ixz="-3.70732769567224E-09"
+        iyy="0.000624908118477413"
+        iyz="-3.51819202590978E-09"
+        izz="0.00114905854450842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_3_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_3_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_1_3_wheel"
+    type="continuous">
+    <origin
+      xyz="0.0800000000000007 -0.133475850714851 0.0195000000000001"
+      rpy="-1.5707963267949 0 0" />
+    <parent
+      link="base_link_Chasis" />
+    <child
+      link="Link_1_3_wheel" />
+    <axis
+      xyz="0 0 -1" />
+  </joint>
+  <link
+    name="Link_1_4_wheel">
+    <inertial>
+      <origin
+        xyz="6.88887376004699E-07 2.79977624520478E-06 -0.0321210915173857"
+        rpy="0 0 0" />
+      <mass
+        value="0.622419475189308" />
+      <inertia
+        ixx="0.000624908723580364"
+        ixy="2.6521354361954E-10"
+        ixz="2.21122175098438E-09"
+        iyy="0.000624900648375635"
+        iyz="4.60786850205311E-09"
+        izz="0.00114905854450842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_4_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_4_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_1_4_wheel"
+    type="continuous">
+    <origin
+      xyz="0.08 0.19608 0.0195"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link_Chasis" />
+    <child
+      link="Link_1_4_wheel" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="Link_2_Arm">
+    <inertial>
+      <origin
+        xyz="0.00748196672374324 0.00102802561169185 0.0638410985827166"
+        rpy="0 0 0" />
+      <mass
+        value="0.628890750175801" />
+      <inertia
+        ixx="0.000520538685244632"
+        ixy="-2.12235972486672E-06"
+        ixz="-0.000139357039232038"
+        iyy="0.000728419435655154"
+        iyz="-1.13027487326274E-06"
+        izz="0.000770486257960158" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_2_Arm.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_2_Arm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_2_Arm"
+    type="revolute">
+    <origin
+      xyz="0 0 0.098503"
+      rpy="0 0 0" />
+    <parent
+      link="base_link_Chasis" />
+    <child
+      link="Link_2_Arm" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Link_3_Arm">
+    <inertial>
+      <origin
+        xyz="0.0296690817173591 0.0937475303009118 0.0154851256686125"
+        rpy="0 0 0" />
+      <mass
+        value="0.253359108687758" />
+      <inertia
+        ixx="0.00110683077017184"
+        ixy="-0.000324885669810858"
+        ixz="1.02859280609467E-07"
+        iyy="0.000181665186280893"
+        iyz="3.25419397857424E-07"
+        izz="0.0012795061824751" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_3_Arm.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_3_Arm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_3_Arm"
+    type="revolute">
+    <origin
+      xyz="0.063383 0.0021739 0.12369"
+      rpy="1.5708 0 0" />
+    <parent
+      link="Link_2_Arm" />
+    <child
+      link="Link_3_Arm" />
+    <axis
+      xyz="0.034278 0 0.99941" />
+    <limit
+      lower="-0.6"
+      upper="1.4"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Link_4_Arm">
+    <inertial>
+      <origin
+        xyz="0.12214 -0.0031288 -0.025262"
+        rpy="0 0 0" />
+      <mass
+        value="0.5315" />
+      <inertia
+        ixx="0.00053038"
+        ixy="3.203E-05"
+        ixz="3.3052E-05"
+        iyy="0.0012792"
+        iyz="8.2845E-06"
+        izz="0.0010824" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_4_Arm.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.75294 0.75294 0.75294 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_4_Arm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_4_Arm"
+    type="revolute">
+    <origin
+      xyz="0.060241 0.1907 -0.0020662"
+      rpy="0 0 0" />
+    <parent
+      link="Link_3_Arm" />
+    <child
+      link="Link_4_Arm" />
+    <axis
+      xyz="-0.034278 0 -0.99941" />
+    <limit
+      lower="-1.57"
+      upper="1.2"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="Link_5_Arm">
+    <inertial>
+      <origin
+        xyz="0.10453 -0.026221 -0.022979"
+        rpy="0 0 0" />
+      <mass
+        value="0.34582" />
+      <inertia
+        ixx="0.00011962"
+        ixy="0.00014937"
+        ixz="1.8439E-11"
+        iyy="0.00069107"
+        iyz="-7.1519E-10"
+        izz="0.0007295" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_5_Arm.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Ensamble_URDF_2ndT/meshes/Link_5_Arm.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_5_Arm"
+    type="revolute">
+    <origin
+      xyz="0.21278 -0.0095961 -0.0037813"
+      rpy="0 0 0" />
+    <parent
+      link="Link_4_Arm" />
+    <child
+      link="Link_5_Arm" />
+    <axis
+      xyz="-0.034278 0 -0.99941" />
+    <limit
+      lower="-2.8"
+      upper="2.8"
+      effort="0"
+      velocity="0" />
+  </joint>
+
+  <transmission name="transmission_1_1_wheel">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="motor_1_1_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint_1_1_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <transmission name="transmission_1_2_wheel">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="motor_1_2_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint_1_2_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <transmission name="transmission_1_3_wheel">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="motor_1_3_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint_1_3_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <transmission name="transmission_1_4_wheel">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="motor_1_4_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="joint_1_4_wheel">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_2_Arm">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor2">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_3_Arm">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor3">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_4_Arm">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor4">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="joint_5_Arm">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor5">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+
+
+
+
+  
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/robot</robotNamespace>
+    </plugin>
+  </gazebo>
+  
+
+
+     
+</robot>

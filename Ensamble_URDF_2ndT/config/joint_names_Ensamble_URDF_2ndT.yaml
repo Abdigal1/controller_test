@@ -1,0 +1,2 @@
+Diff_drive:
+  controller_joint_names: ['', 'joint_1_1_wheel', 'joint_1_2_wheel', 'joint_1_3_wheel', 'joint_1_4_wheel', 'joint_2_Arm', 'joint_3_Arm', 'joint_4_Arm', 'joint_5_Arm', ]
