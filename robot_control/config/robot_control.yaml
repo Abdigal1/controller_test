@@ -6,15 +6,15 @@ robot:
 
   # Position Controllers ---------------------------------------
   joint2_position_controller:
-    type: position_controllers/JointPositionController
+    type: effort_controllers/JointPositionController
     joint: joint_2_Arm
     pid: {p: 100.0, i: 0.01, d: 10.0}
   joint3_position_controller:
-    type: position_controllers/JointPositionController
+    type: effort_controllers/JointPositionController
     joint: joint_3_Arm
     pid: {p: 100.0, i: 0.01, d: 10.0}
   joint4_position_controller:
-    type: position_controllers/JointPositionController
+    type: effort_controllers/JointPositionController
     joint: joint_4_Arm
     pid: {p: 100.0, i: 0.01, d: 10.0}
 
