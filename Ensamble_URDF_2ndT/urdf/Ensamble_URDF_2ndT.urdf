@@ -317,8 +317,8 @@
     <limit
       lower="-3.14"
       upper="3.14"
-      effort="0"
-      velocity="0" />
+      effort="100"
+      velocity="100" />
   </joint>
   <link
     name="Link_3_Arm">
@@ -375,8 +375,8 @@
     <limit
       lower="-0.6"
       upper="1.4"
-      effort="0"
-      velocity="0" />
+      effort="100"
+      velocity="100" />
   </joint>
   <link
     name="Link_4_Arm">
@@ -433,8 +433,8 @@
     <limit
       lower="-1.57"
       upper="1.2"
-      effort="0"
-      velocity="0" />
+      effort="100"
+      velocity="100" />
   </joint>
   <link
     name="Link_5_Arm">
@@ -491,8 +491,8 @@
     <limit
       lower="-2.8"
       upper="2.8"
-      effort="0"
-      velocity="0" />
+      effort="100"
+      velocity="100" />
   </joint>
 
   <transmission name="transmission_1_1_wheel">
