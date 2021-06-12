@@ -314,6 +314,7 @@
       link="Link_2_Arm" />
     <axis
       xyz="0 0 1" />
+    <dynamics damping="0.1" friction="0.0"/>
     <limit
       lower="-3.14"
       upper="3.14"
@@ -372,6 +373,7 @@
       link="Link_3_Arm" />
     <axis
       xyz="0.034278 0 0.99941" />
+    <dynamics damping="0.1" friction="0.0"/>
     <limit
       lower="-0.6"
       upper="1.4"
@@ -430,6 +432,7 @@
       link="Link_4_Arm" />
     <axis
       xyz="-0.034278 0 -0.99941" />
+    <dynamics damping="0.1" friction="0.0"/>
     <limit
       lower="-1.57"
       upper="1.2"
@@ -470,6 +473,7 @@
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
+      
       <geometry>
         <mesh
           filename="package://Ensamble_URDF_2ndT/meshes/Link_5_Arm.STL" />
@@ -488,6 +492,7 @@
       link="Link_5_Arm" />
     <axis
       xyz="-0.034278 0 -0.99941" />
+    <dynamics damping="0.1" friction="0.01"/>
     <limit
       lower="-2.8"
       upper="2.8"
@@ -499,7 +504,7 @@
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="motor_1_1_wheel">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
+      <mechanicalReduction>75</mechanicalReduction>
     </actuator>
     <joint name="joint_1_1_wheel">
       <hardwareInterface>VelocityJointInterface</hardwareInterface>
@@ -509,7 +514,7 @@
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="motor_1_2_wheel">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
+      <mechanicalReduction>75</mechanicalReduction>
     </actuator>
     <joint name="joint_1_2_wheel">
       <hardwareInterface>VelocityJointInterface</hardwareInterface>
@@ -519,7 +524,7 @@
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="motor_1_3_wheel">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
+      <mechanicalReduction>75</mechanicalReduction>
     </actuator>
     <joint name="joint_1_3_wheel">
       <hardwareInterface>VelocityJointInterface</hardwareInterface>
@@ -529,7 +534,7 @@
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="motor_1_4_wheel">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
+      <mechanicalReduction>75</mechanicalReduction>
     </actuator>
     <joint name="joint_1_4_wheel">
       <hardwareInterface>VelocityJointInterface</hardwareInterface>
@@ -543,7 +548,7 @@
     </joint>
     <actuator name="motor2">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>0.001</mechanicalReduction>
+      <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
@@ -554,7 +559,7 @@
     </joint>
     <actuator name="motor3">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>0.001</mechanicalReduction>
+      <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
@@ -565,7 +570,7 @@
     </joint>
     <actuator name="motor4">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>0.001</mechanicalReduction>
+      <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
@@ -576,7 +581,7 @@
     </joint>
     <actuator name="motor5">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>0.001</mechanicalReduction>
+      <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
