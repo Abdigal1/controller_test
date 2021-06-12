@@ -1,0 +1,20 @@
+digraph G {
+node [shape=box];
+"map" [label="map"];
+"base_link_Chasis" [label="base_link_Chasis"];
+"Link_1_1_wheel" [label="Link_1_1_wheel"];
+"Link_1_2_wheel" [label="Link_1_2_wheel"];
+"Link_1_3_wheel" [label="Link_1_3_wheel"];
+"Link_1_4_wheel" [label="Link_1_4_wheel"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"map" -> "dummy_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"dummy_joint" -> "base_link_Chasis"
+"base_link_Chasis" -> "joint_1_1_wheel" [label="xyz: -0.12 -0.13348 0.0195 \nrpy: -1.5708 0 0"]
+"joint_1_1_wheel" -> "Link_1_1_wheel"
+"base_link_Chasis" -> "joint_1_2_wheel" [label="xyz: -0.12 0.196084 0.0195 \nrpy: -1.5708 0 0"]
+"joint_1_2_wheel" -> "Link_1_2_wheel"
+"base_link_Chasis" -> "joint_1_3_wheel" [label="xyz: 0.08 -0.133476 0.0195 \nrpy: -1.5708 0 0"]
+"joint_1_3_wheel" -> "Link_1_3_wheel"
+"base_link_Chasis" -> "joint_1_4_wheel" [label="xyz: 0.08 0.19608 0.0195 \nrpy: -1.5708 0 0"]
+"joint_1_4_wheel" -> "Link_1_4_wheel"
+}
