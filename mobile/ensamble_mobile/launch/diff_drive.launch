@@ -8,7 +8,8 @@
         <arg name="model" value="$(arg model)"/>                
     </include>
 
-
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"/>
+  
 
     <arg
       name="gui"
@@ -48,7 +49,8 @@
  
   
   <node name="robot_arm_controller_spawner" pkg="controller_manager" type="spawner" output="screen" respawn="true"
-  ns="robot" args="diff_drive_controller"/>
+  ns="robot" args="diff_drive_controller
+                  joint_state_controller"/>
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
       respawn="false" ns="robot" output="screen">
