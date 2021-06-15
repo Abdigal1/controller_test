@@ -4,6 +4,7 @@
 
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
+  <!--<arg name="robot_description" textfile="$(arg urdf_path)"/>-->
 
   <!-- Load universal robot description format (URDF) -->
   <param if="$(arg load_robot_description)" name="$(arg robot_description)" textfile="$(find Ensamble_URDF_manipulator)/urdf/Ensamble_URDF_2ndT.urdf"/>
