@@ -6,6 +6,8 @@
   name="robot">
   <link name="map">
    </link>
+  <link name="optical">
+  </link>
   <link
     name="base_link_Chasis">
     <inertial>
@@ -100,7 +102,7 @@
 
   <link name="rgbd_cam">
     <inertial>
-      <origin xyz="0.0221 0.0 0.0045" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>
       <mass value="0.1"/>
       <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
     </inertial>
@@ -115,9 +117,13 @@
   <joint name="rgbd_link" type="fixed">
     <parent link="base_link_Chasis"/>
     <child link="rgbd_cam"/>
-    <origin xyz="0.0221 0.0 0.0045" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>
   </joint>
-
+  <joint name="optical_joint" type="fixed">
+    <parent link="rgbd_cam"/>
+    <child link="optical"/>
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5708 0.0 -1.5708"/>   
+  </joint>
 
 
 
@@ -346,7 +352,25 @@
     </joint>
   </transmission>
 
-  
+  <gazebo reference="base_link_Chasis">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+  <gazebo reference="rear_right_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="rear_left_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="front_right_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="front_left_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="rgbd_cam">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/robot</robotNamespace>
@@ -355,7 +379,8 @@
   </gazebo>
 
   <gazebo reference="rgbd_cam">
-    <sensor type="depth" name="camera">       
+    <sensor type="depth" name="camera">  
+      <pose>0.0 0.0 0.0 1.0 0.0 0.0</pose>     
       <always_on>true</always_on>
       <visualize>true</visualize>             
       <camera>
@@ -366,7 +391,6 @@
               <format>R8G8B8</format>
           </image>
           <depth_camera>
-
           </depth_camera>
           <clip>
               <near>0.1</near>
@@ -378,7 +402,7 @@
           <alwaysOn>true</alwaysOn>
               <updateRate>10.0</updateRate>
               <cameraName>camera</cameraName>
-              <frameName>rgbd_cam</frameName>                   
+              <frameName>optical</frameName>                   
           <imageTopicName>rgb/image_raw</imageTopicName>
           <depthImageTopicName>depth/image_raw</depthImageTopicName>
           <pointCloudTopicName>depth/points</pointCloudTopicName>
@@ -394,6 +418,9 @@
           <CxPrime>0.0</CxPrime>
           <Cx>0.0</Cx>
           <Cy>0.0</Cy>
+          <Or>0.0</Or>
+          <Op>1.5708</Op>
+          <Oy>0.0</Oy>
           <focalLength>0.0</focalLength>
           </plugin>
     </sensor>
