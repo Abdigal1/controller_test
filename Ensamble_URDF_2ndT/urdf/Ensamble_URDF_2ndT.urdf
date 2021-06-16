@@ -262,6 +262,17 @@
     <axis
       xyz="0 0 1" />
   </joint>
+
+
+
+
+
+
+
+
+
+
+  
   <link
     name="Link_2_Arm">
     <inertial>
@@ -541,6 +552,13 @@
     </joint>
   </transmission>
 
+
+
+
+
+
+
+
   <transmission name="tran2">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="joint_2_Arm">
@@ -584,6 +602,11 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
+
+
+
+
+
 
 
 

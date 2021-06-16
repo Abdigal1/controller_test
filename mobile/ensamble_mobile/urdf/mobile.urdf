@@ -311,6 +311,9 @@
     <joint_properties damping="0.7"/>
   </joint>
   
+
+
+
   <transmission name="transmission_rear_right">
     <type>transmission_interface/SimpleTransmission</type>
     <actuator name="motor_rear_right">
@@ -352,6 +355,10 @@
     </joint>
   </transmission>
 
+
+
+
+
   <gazebo reference="base_link_Chasis">
     <material>Gazebo/Orange</material>
   </gazebo>
@@ -371,12 +378,18 @@
     <material>Gazebo/Red</material>
   </gazebo>
 
+
+
+
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/robot</robotNamespace>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
+
+
+
 
   <gazebo reference="rgbd_cam">
     <sensor type="depth" name="camera">  
