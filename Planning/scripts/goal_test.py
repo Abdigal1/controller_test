@@ -230,17 +230,17 @@ def main():
     try:
         tutorial = MoveGroupPythonInterfaceTutorial()
 
-        print("inicio")
-        tutorial.go_to_joint_state(j1=0,j2=0,j3=0)
-        print("0")
-        tutorial.go_to_joint_state(j1=pi/8,j2=-0.2,j3=-0.2)
-        print("1")
-        tutorial.go_to_joint_state(j1=0,j2=0,j3=0)
-        print("0")
-        tutorial.go_to_joint_state(j1=-pi/8,j2=-0.2,j3=-0.2)
-        print("2")
-
-        tutorial.go_to_pose_goal()
+        while True:
+            print("inicio")
+            tutorial.go_to_joint_state(j1=0,j2=0,j3=-0.1)
+            print("0")
+            tutorial.go_to_joint_state(j1=pi/4,j2=-0.6,j3=-0.2)
+            print("1")
+            tutorial.go_to_joint_state(j1=0,j2=0,j3=-0.1)
+            print("0")
+            tutorial.go_to_joint_state(j1=-pi/4,j2=-0.6,j3=-0.2)
+            print("2")
+            tutorial.go_to_joint_state(j1=0,j2=0,j3=-0.1)
 
     except rospy.ROSInterruptException:
         return
