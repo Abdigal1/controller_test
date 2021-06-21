@@ -12,7 +12,7 @@ def talkers():
     rate = rospy.Rate(50) # 10hz
     i = 0.0
     while not rospy.is_shutdown():
-        pub1.publish(0.4*math.sin(i/10))
+        pub1.publish(1.5*math.sin(i/10))
         pub2.publish(0.7*math.sin(i/10))
         pub3.publish(0.5*math.sin(i/10))
         i+=1.0
