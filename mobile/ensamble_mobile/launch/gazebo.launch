@@ -6,13 +6,23 @@
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
-  <arg name="model" default="$(find ensamble_mobile)/urdf/mobile.urdf"/>
+  
+  <!--<arg name="model" default="$(find ensamble_mobile)/urdf/mobile.urdf"/>-->
+  <arg name="model" default="$(find Ensamble_URDF_2ndT)/urdf/Ensamble_URDF_2ndT.urdf"/>
   
   <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
+ <!--
+  <include file="$(find ros_ign_gazebo)/launch/ign_gazebo.launch">
+      <env name="IGN_GAZEBO_MODEL_PATH" value="$(arg world_dir)" />
+      <env name="IGN_GAZEBO_RESOURCE_PATH" value="$(arg world_dir)" />
+      <arg name="ign_args" value="-r -v 3 tomato_field.sdf"/>
+  </include>
+  -->
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="verbose" value="true" />
+    <arg name="world_name" value="test_test.world"/>
+   
     <arg name="debug" value="$(arg debug)"/>
     <arg name="gui" value="$(arg gui)"/>
     <arg name="paused" value="$(arg paused)"/>
@@ -22,9 +32,10 @@
   </include>
 
 
-  
+
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-z 0.5 -urdf -model robot -param robot_description"/>
+    args="-z 5.0 -x 4.3 -y 1.7 -urdf -model robot -param robot_description"/>
+
 
     
   

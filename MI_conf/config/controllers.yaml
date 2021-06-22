@@ -1,0 +1,10 @@
+controller_list:
+  - name: robot/joint_trajectory_controller
+  #- name: joint_trajectory_action
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - joint_2_Arm
+      - joint_3_Arm
+      - joint_4_Arm
