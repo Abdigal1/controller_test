@@ -28,9 +28,10 @@
     <end_effector name="spray" parent_link="Link_4_Arm" group="spray_group" parent_group="Arm" />
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <!--<virtual_joint name="position" type="fixed" parent_frame="world" child_link="base_link_Chasis" />-->
-    <virtual_joint name="position" type="fixed" parent_frame="base_link_Chasis" child_link="Link_2_Arm" />
+    <virtual_joint name="world_joint" type="fixed" parent_frame="world" child_link="map" />
     <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
     <passive_joint name="joint_5_Arm" />
+    <passive_joint name="world_joint" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="rear_right_wheel" link2="rear_left_wheel" reason="Never" />
     <disable_collisions link1="rear_right_wheel" link2="front_right_wheel" reason="Never" />
