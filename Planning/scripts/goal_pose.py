@@ -46,6 +46,9 @@ class MoveGroupPythonInterfaceTutorial(object):
     def __init__(self):
         super(MoveGroupPythonInterfaceTutorial, self).__init__()
 
+        joint_state_topic = ['joint_states:=/robot/joint_states']
+        moveit_commander.roscpp_initialize(joint_state_topic)
+
         moveit_commander.roscpp_initialize(sys.argv)
         rospy.init_node("move_group_python_interface_tutorial", anonymous=True)
 
@@ -53,8 +56,13 @@ class MoveGroupPythonInterfaceTutorial(object):
 
         scene = moveit_commander.PlanningSceneInterface()
 
-        group_name = "Arm_"
+        #group_name = "Arm"
+        group_name = "ArmR"
         move_group = moveit_commander.MoveGroupCommander(group_name)
+        move_group.set_planner_id("LazyPRMstar")
+        move_group.set_planning_time(10)
+        move_group.set_goal_orientation_tolerance(100000000)
+        move_group.set_goal_position_tolerance(0.05)
 
         display_trajectory_publisher = rospy.Publisher(
             "/move_group/display_planned_path",
@@ -104,26 +112,33 @@ class MoveGroupPythonInterfaceTutorial(object):
         move_group = self.move_group
 
         pose_goal = geometry_msgs.msg.Pose()
-        pose_goal = geometry_msgs.msg.Point()
+        #pose_goal = geometry_msgs.msg.Point()
         print("pose")
         print(self.move_group.get_current_pose().pose)
+        #print(pose_goal)
+        #pose_goal.orientation.x= 0.541446798455
+        #pose_goal.orientation.y= 0.436127094536
+        pose_goal.orientation.z= -1
+        #pose_goal.orientation.w= 0.572922732445
+        pose_goal.position.x = x
+        pose_goal.position.y = y
+        pose_goal.position.z = z
+        print("pose_goal")
         print(pose_goal)
-        #pose_goal.orientation.w = 1.0
-        pose_goal.x = x
-        pose_goal.y = y
-        pose_goal.z = z
-        print(pose_goal)
-        #move_group.set_position_target(pose_goal)
-        move_group.set_position_target(xyz=[x,y,z])
+        move_group.set_pose_target(pose_goal)
+        #move_group.set_position_target(xyz=[x,y,z],end_effector_link = "Link_5_Arm")
         print("hola")
         plan = move_group.go(wait=True)
         print("plan")
         print(plan)
+        print("plan")
         move_group.stop()
+        print("plan")
         move_group.clear_pose_targets()
-
+        print("plan")
         current_pose = self.move_group.get_current_pose().pose
-        return all_close(pose_goal, current_pose, 0.01)
+        #return all_close(pose_goal, current_pose, 0.01)
+        return "done"
 
     def plan_cartesian_path(self, scale=1):
         move_group = self.move_group
@@ -236,7 +251,7 @@ class MoveGroupPythonInterfaceTutorial(object):
 def main():
     try:
         MG = MoveGroupPythonInterfaceTutorial()
-        MG.go_to_pose_goal(0.33,0.01,0.0)
+        MG.go_to_pose_goal(0.3,0.3,0.3)
 
     except rospy.ROSInterruptException:
         return

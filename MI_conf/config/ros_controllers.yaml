@@ -39,6 +39,7 @@ robot:
         - joint_2_Arm
         - joint_3_Arm
         - joint_4_Arm
+        - joint_5_Arm
     gains:
       joint_2_Arm:
         p: 100
@@ -55,3 +56,20 @@ robot:
         d: 1
         i: 1
         i_clamp: 1
+      joint_5_Arm:
+        p: 0
+        d: 0
+        i: 0
+        i_clamp: 1
+    constraints:
+      goal_time: 4.0
+      stopped_velocity_tolerance: 1.0
+      joint_2_Arm:
+        goal: 0.5
+        trajectory: 1.0
+      joint_3_Arm:
+        goal: 0.5
+        trajectory: 1.0
+      joint_4_Arm:
+        goal: 0.5
+        trajectory: 1.0

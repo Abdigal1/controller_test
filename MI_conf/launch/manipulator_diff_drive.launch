@@ -35,20 +35,21 @@
   </include>
 
   <!-- If needed, broadcast static tf for robot root -->
-  
+   <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" ns="robot" args="0 0 0 0 0 0 world map 100" />
 
   <!-- We do not have a robot connected, so publish fake joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
     <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
     <rosparam param="source_list">[/joint_states]</rosparam>
+    <remap from="joint_states" to="robot/joint_states"/>
   </node>
-  <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
+  <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" ns="robot" if="$(arg use_gui)">
     <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
     <rosparam param="source_list">[/joint_states]</rosparam>
   </node>
 
   <!-- Given the published joint states, publish tf for the robot links -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" ns="robot" output="screen" />
 
   <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
   <include file="$(find MI_conf)/launch/move_group.launch">
@@ -72,9 +73,9 @@
     ns="robot" args="diff_drive_controller
                   joint_state_controller"/>
 
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
       respawn="false" ns="robot" output="screen">
-  </node>
+  </node>-->
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
     <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
         

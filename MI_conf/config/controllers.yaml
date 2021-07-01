@@ -8,3 +8,4 @@ controller_list:
       - joint_2_Arm
       - joint_3_Arm
       - joint_4_Arm
+      - joint_5_Arm
