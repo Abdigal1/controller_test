@@ -8,7 +8,7 @@
         <arg name="model" value="$(arg model)"/>                
     </include>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig) -f odom"/>
   
 
     <arg
@@ -38,6 +38,7 @@
 
   <rosparam command="load" file="$(find ensamble_mobile)/config/diff_drive.yaml"/>
   
+
     <!--
     <rosparam command="load" file="$(find Ensamble_URDF_2ndT)/config/pid_controllers.yaml"/>
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
@@ -52,12 +53,28 @@
   ns="robot" args="diff_drive_controller
                   joint_state_controller"/>
 
+
+
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
       respawn="false" ns="robot" output="screen">
   </node>
+
+
+
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
     <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
         
   </node>
+
+
+  <node name="rgbd_odometry" pkg="rtabmap_ros" type="rgbd_odometry" output="log">
+      <param name="frame_id" value="base_link_Chasis"/>
+      <param name="odom_frame_id" value="odom"/>
+  </node> 
+
+  <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
+      <remap from="cloud_in" to="depth/points"/>
+  </node>
+
 
 </launch>

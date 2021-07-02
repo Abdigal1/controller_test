@@ -4,10 +4,9 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="robot">
-  <link name="map">
-   </link>
-  <link name="optical">
-  </link>
+ <!-- <link name="map">
+   </link>-->
+
   <link
     name="base_link_Chasis">
     <inertial>
@@ -88,10 +87,10 @@
       </geometry>
     </collision>
   </link>
-    <joint name="dummy_joint" type="fixed">
+  <!--  <joint name="dummy_joint" type="fixed">
      <parent link="map"/>
      <child link="base_link_Chasis"/>
-   </joint>
+   </joint>-->
 
 
 
@@ -114,6 +113,10 @@
     </visual>
   </link>
 
+  <link name="optical">
+
+  </link>
+
   <joint name="rgbd_link" type="fixed">
     <parent link="base_link_Chasis"/>
     <child link="rgbd_cam"/>
@@ -122,7 +125,7 @@
   <joint name="optical_joint" type="fixed">
     <parent link="rgbd_cam"/>
     <child link="optical"/>
-    <origin xyz="0.0 0.0 0.0" rpy="-1.5708 0.0 -1.5708"/>   
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5708 0.0 -1.5708"/>  
   </joint>
 
 
@@ -733,6 +736,37 @@
 
 
 
+
+
+
+  <gazebo reference="rgbd_cam">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+
+
+
+
+
+
+
   <gazebo reference="rgbd_cam">
     <sensor type="depth" name="camera">  
       <pose>0.0 0.0 0.0 1.0 0.0 0.0</pose>     
@@ -756,10 +790,10 @@
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
               <updateRate>10.0</updateRate>
-              <cameraName>camera</cameraName>
+              <cameraName>/</cameraName>
               <frameName>optical</frameName>                   
-          <imageTopicName>rgb/image_raw</imageTopicName>
-          <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <imageTopicName>rgb/image</imageTopicName>
+          <depthImageTopicName>depth/image</depthImageTopicName>
           <pointCloudTopicName>depth/points</pointCloudTopicName>
           <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>              
           <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>            
