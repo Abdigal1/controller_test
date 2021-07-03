@@ -441,8 +441,8 @@
       xyz="0.034278 0 0.99941" />
     <dynamics damping="0.1" friction="0.0"/>
     <limit
-      lower="-10.6"
-      upper="10.4"
+      lower="-1.6"
+      upper="1.4"
       effort="100"
       velocity="100" />
   </joint>
@@ -500,8 +500,8 @@
       xyz="-0.034278 0 -0.99941" />
     <dynamics damping="0.1" friction="0.0"/>
     <limit
-      lower="-10.57"
-      upper="10.2"
+      lower="-1.87"
+      upper="1.2"
       effort="100"
       velocity="100" />
   </joint>
@@ -560,8 +560,8 @@
       xyz="-0.034278 0 -0.99941" />
     <dynamics damping="0.1" friction="0.01"/>
     <limit
-      lower="-20.8"
-      upper="20.8"
+      lower="-2.5"
+      upper="2.5"
       effort="100"
       velocity="100" />
   </joint>

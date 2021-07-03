@@ -1,0 +1,6 @@
+<launch>
+
+  <node name="To_pose" pkg="Planning" type="pose_node.py" respawn="false" output="screen">
+  </node>
+
+</launch>

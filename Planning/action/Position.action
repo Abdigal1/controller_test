@@ -1,0 +1,9 @@
+# Define the goal
+geometry_msgs/Pose goal  # Specify which dishwasher we want to use
+---
+# Define the result
+string log
+#uint32 total_dishes_cleaned
+---
+# Define a feedback message
+string log_feedback
