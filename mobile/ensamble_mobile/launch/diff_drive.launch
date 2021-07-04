@@ -8,7 +8,7 @@
         <arg name="model" value="$(arg model)"/>                
     </include>
 
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig) -f odom"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig) -f map"/>
   
 
     <arg
@@ -67,14 +67,22 @@
   </node>
 
 
-  <node name="rgbd_odometry" pkg="rtabmap_ros" type="rgbd_odometry" output="log">
-      <param name="frame_id" value="base_link_Chasis"/>
-      <param name="odom_frame_id" value="odom"/>
-  </node> 
+
 
   <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
       <remap from="cloud_in" to="depth/points"/>
   </node>
 
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+    <rosparam command="load" file="$(find ensamble_mobile)/config/ekf_template.yaml" />
+
+    <!--  Placeholder for output topic remapping
+    <remap from="odometry/filtered" to=""/>
+    <remap from="accel/filtered" to=""/>
+    -->
+
+  </node>
+ 
 
 </launch>

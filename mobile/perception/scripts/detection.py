@@ -14,29 +14,41 @@ from cv_bridge import CvBridge, CvBridgeError
 class image_converter:
 
   def __init__(self):
-    self.image_pub = rospy.Publisher("/camera/rgb/process_1",Image)
+    self.image_pub = rospy.Publisher("/rgb/process_1",Image)
 
     self.bridge = CvBridge()
-    self.image_sub = rospy.Subscriber("/camera/rgb/image_raw",Image,self.callback)
+    self.image_sub = rospy.Subscriber("/rgb/image",Image,self.callback)
     self.flag = True
 
   def callback(self,data):
     try:
       cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
+      
     except CvBridgeError as e:
       print(e)
     
     if self.flag:
       cv2.imwrite('/home/lambda/Downloads/avr.jpg', cv_image)
       self.flag  = False
-    
+
+
     hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
 
-    _, thresh1 = cv2.threshold(cv_image[:, :, 0], 0, 50, cv2.THRESH_BINARY)
-    _, thresh2 = cv2.threshold(cv_image[:, :, 1], 180, 255, cv2.THRESH_BINARY)
-    _, thresh3 = cv2.threshold(cv_image[:, :, 2], 0, 50, cv2.THRESH_BINARY)
-    _, thresh4 = cv2.threshold(hsv[:, :, 1], 0, 255, cv2.THRESH_BINARY)
+    _, thresh1 = cv2.threshold(cv_image[:, :, 0], 0, 30, cv2.THRESH_BINARY)
+    _, thresh2 = cv2.threshold(cv_image[:, :, 1], 200, 255, cv2.THRESH_BINARY)
+    _, thresh3 = cv2.threshold(cv_image[:, :, 2], 0, 10, cv2.THRESH_BINARY)
+    _, thresh4 = cv2.threshold(hsv[:, :, 1], 200, 255, cv2.THRESH_BINARY)
     thresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
+
+
+    dilatation_size = 5
+    dilation_shape = cv2.MORPH_ELLIPSE
+    element = cv2.getStructuringElement(dilation_shape, (2 * dilatation_size + 1, 2 * dilatation_size + 1),
+                                       (dilatation_size, dilatation_size))
+    
+    thresh = cv2.dilate(thresh, element)
+
+
     # Find contours:
     _, contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     N = len(contours)
@@ -52,8 +64,14 @@ class image_converter:
           (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
 
 
+
+
+
+
+
+    cv2.imshow("Image window", np.hstack((cv2.bitwise_and(cv_image,cv_image, mask= thresh), cv_image)))
     #cv2.imshow("Image window", cv2.bitwise_and(cv_image,cv_image, mask= thresh))
-    cv2.imshow("Image window", cv_image)
+    #cv2.imshow("Image window", cv_image)
     cv2.waitKey(3)
 
     try:
