@@ -6,9 +6,11 @@ import rospy
 import actionlib
 from goal_pose import MoveGroupPythonInterfaceTutorial
 
-from Planning.msg import PositionAction
+from Planning.msg import PositionAction, PositionActionResult, PositionActionFeedback
 
-class To_position_server:
+class To_position_server(object):
+  _feedback=PositionActionFeedback()
+  _result=PositionActionResult()
   def __init__(self):
     self.MG = MoveGroupPythonInterfaceTutorial('to_position_server')
     self.server = actionlib.SimpleActionServer('to_position', PositionAction, self.execute, False)
@@ -20,8 +22,11 @@ class To_position_server:
     print("recieved in server")
     print(goal)
     self.MG.go_to_pose_goal(goal.goal)
-    #print(self.move_group.get_current_pose().pose)
-    self.server.set_succeeded()
+    real_pose=self.MG.move_group.get_current_pose().pose
+    print(self._result)
+    self._result.result.real_goal=real_pose
+    print(self._result)
+    self.server.set_succeeded(self._result.result)
 
 
 if __name__ == '__main__':

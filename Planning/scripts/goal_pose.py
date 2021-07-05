@@ -111,23 +111,11 @@ class MoveGroupPythonInterfaceTutorial(object):
     def go_to_pose_goal(self,pose_goal):
         move_group = self.move_group
 
-        #pose_goal = geometry_msgs.msg.Pose()
-        #pose_goal = geometry_msgs.msg.Point()
         print("pose")
         print(self.move_group.get_current_pose().pose)
-        #print(pose_goal)
-        #pose_goal.orientation.x= 0.541446798455
-        #pose_goal.orientation.y= 0.436127094536
-        #pose_goal.orientation.z= -1
-        #pose_goal.orientation.w= 0.572922732445
-        #pose_goal.position.x = x
-        #pose_goal.position.y = y
-        #pose_goal.position.z = z
         print("pose_goal")
         print(pose_goal)
         move_group.set_pose_target(pose_goal)
-        
-        #move_group.set_position_target(xyz=[x,y,z],end_effector_link = "Link_5_Arm")
         plan = move_group.go(wait=True)
         print(plan)
         move_group.stop()
@@ -158,16 +146,6 @@ class MoveGroupPythonInterfaceTutorial(object):
 
         return plan, fraction
 
-    def display_trajectory(self, plan):
-        robot = self.robot
-        display_trajectory_publisher = self.display_trajectory_publisher
-
-        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
-        display_trajectory.trajectory_start = robot.get_current_state()
-        display_trajectory.trajectory.append(plan)
-
-        display_trajectory_publisher.publish(display_trajectory)
-
     def execute_plan(self, plan):
         move_group = self.move_group
 
@@ -193,56 +171,6 @@ class MoveGroupPythonInterfaceTutorial(object):
 
         return False
 
-    def add_box(self, timeout=4,size=(0.075, 0.075, 0.075),position=(0.11,0.11,0.11)):
-        box_name = self.box_name
-        scene = self.scene
-
-        box_pose = geometry_msgs.msg.PoseStamped()
-        box_pose.header.frame_id = "panda_hand"
-        box_pose.pose.orientation.w = 1.0
-        box_pose.pose.position.x = position[0]  # above the panda_hand frame
-        box_pose.pose.position.y = position[1]
-        box_pose.pose.position.z = position[2]
-        box_name = "box"
-        scene.add_box(box_name, box_pose, size=size)
-        self.box_name = box_name
-        return self.wait_for_state_update(box_is_known=True, timeout=timeout)
-
-    def attach_box(self, timeout=4):
-        box_name = self.box_name
-        robot = self.robot
-        scene = self.scene
-        eef_link = self.eef_link
-        group_names = self.group_names
-
-        grasping_group = "hand"
-        touch_links = robot.get_link_names(group=grasping_group)
-        scene.attach_box(eef_link, box_name, touch_links=touch_links)
-
-        return self.wait_for_state_update(
-            box_is_attached=True, box_is_known=False, timeout=timeout
-        )
-
-    def detach_box(self, timeout=4):
-        box_name = self.box_name
-        scene = self.scene
-        eef_link = self.eef_link
-
-        scene.remove_attached_object(eef_link, name=box_name)
-
-        return self.wait_for_state_update(
-            box_is_known=True, box_is_attached=False, timeout=timeout
-        )
-
-    def remove_box(self, timeout=4):
-        box_name = self.box_name
-        scene = self.scene
-
-        scene.remove_world_object(box_name)
-
-        return self.wait_for_state_update(
-            box_is_attached=False, box_is_known=False, timeout=timeout
-        )
 
 def main():
     try:
