@@ -4,8 +4,12 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="robot">
-  <link name="map">
+<!--  <link name="map">
    </link>
+  <joint name="dummy_joint" type="fixed">
+    <parent link="map"/>
+    <child link="base_link"/>
+  </joint>-->
 
   <link
     name="base_link">
@@ -91,10 +95,6 @@
     </collision>
   </link>
 
-  <joint name="dummy_joint" type="fixed">
-     <parent link="map"/>
-     <child link="base_link"/>
-   </joint>
 
 
 
@@ -791,8 +791,8 @@
           <depth_camera>
           </depth_camera>
           <clip>
-              <near>0.01</near>
-              <far>3</far>
+              <near>0.001</near>
+              <far>3.0</far>
           </clip>
       </camera>
       <plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">

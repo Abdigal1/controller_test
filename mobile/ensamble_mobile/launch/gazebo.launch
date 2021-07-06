@@ -32,7 +32,7 @@
 
 
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-z 2.0 -x -9.3 -y 9.0 -urdf -model robot -param robot_description"/>
+    args="-z 0.5 -x -9.3 -y 9.0 -urdf -model robot -param robot_description"/>
 
 
     
