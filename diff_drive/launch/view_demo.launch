@@ -1,12 +1,58 @@
 <launch > 
 
-    <arg name="model" default="$(find diff_drive)/urdf/01-diff_drive.urdf"/>
+    <arg name="model" default="$(find ensamble_mobile)/urdf/mobile.urdf"/>
     <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
     <param name="joint_state_publisher_gui" value="true"/>
 
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen"/>
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find urdf_tutorial)/rviz/urdf.rviz" required="true"/>
+
+  
+  
+
+    <!--
+    <rosparam command="load" file="$(find Ensamble_URDF_2ndT)/config/pid_controllers.yaml"/>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/pid_controllers" args="wheel_1_controller wheel_2_controller wheel_3_controller wheel_4_controller"/>
+    -->
+ 
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  
+ 
+  <rosparam command="load" file="$(find ensamble_mobile)/config/diff_drive.yaml"/>
+  
+
+    <!--
+    <rosparam command="load" file="$(find Ensamble_URDF_2ndT)/config/pid_controllers.yaml"/>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+        output="screen" ns="/pid_controllers" args="wheel_1_controller wheel_2_controller wheel_3_controller wheel_4_controller"/>
+    -->
+ 
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  
+ 
+  
+  <node name="robot_arm_controller_spawner" pkg="controller_manager" type="spawner" output="screen" respawn="true"
+   args="robot/diff_drive_controller"/>
+
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
+        
+  </node>
+
+
+
+
+  <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
+      <remap from="cloud_in" to="depth/points"/>
+      <param name="range_min" value="0.001"/>
+      <param name="range_max" value="3.0"/>
+      <param name="target_frame" value="base_link"/>
+      
+      
+      
+  </node>
 
 
 </launch>

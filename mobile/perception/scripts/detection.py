@@ -54,7 +54,7 @@ class image_converter:
     _, thresh2 = cv2.threshold(self.cv_image[:, :, 1], 200, 255, cv2.THRESH_BINARY)
     _, thresh3 = cv2.threshold(self.cv_image[:, :, 2], 0, 10, cv2.THRESH_BINARY)
     _, thresh4 = cv2.threshold(hsv[:, :, 1], 200, 255, cv2.THRESH_BINARY)
-    thresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
+    rthresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
 
 
     dilatation_size = 7
@@ -62,7 +62,7 @@ class image_converter:
     element = cv2.getStructuringElement(dilation_shape, (2 * dilatation_size + 1, 2 * dilatation_size + 1),
                                        (dilatation_size, dilatation_size))
     
-    thresh = cv2.dilate(thresh, element)
+    thresh = cv2.dilate(rthresh, element)
 
 
     # Find contours:
@@ -78,20 +78,20 @@ class image_converter:
       br1 = cv2.boundingRect(max_cont[-(i+1)])
       cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
           (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
-
-    cnt = max_cont[-1]
-    M = cv2.moments(cnt)
-    cx = int(M['m10']/M['m00'])
-    cy = int(M['m01']/M['m00'])
-    ix =cx + cy*480
-    rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
-
-
+    if len(max_cont)>0:
+      cnt = max_cont[-1]
+      M = cv2.moments(cnt)
+      cx = int(M['m10']/M['m00'])
+      cy = int(M['m01']/M['m00'])
+      ix =cx + cy*480 #
+      rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
 
 
-    #cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= thresh), self.cv_image)))
+
+
+    cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
     #cv2.imshow("Image window", cv2.bitwise_and(self.cv_image,self.cv_image, mask= thresh))
-    cv2.imshow("Image window", self.cv_image)
+    #cv2.imshow("Image window", self.cv_image)
     #cv2.imshow("Image window", np.hstack((np.dstack((self.sdepth_image, np.zeros_like(self.sdepth_image), np.zeros_like(self.sdepth_image))), self.cv_image)))
     #cv2.imshow("Ra", self.depth_image)
     cv2.waitKey(3)
