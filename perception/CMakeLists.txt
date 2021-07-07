@@ -7,12 +7,14 @@ project(perception)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
+find_package(catkin REQUIRED genmsg actionlib_msgs actionlib COMPONENTS
   cv_bridge
   roscpp
   rospy
   sensor_msgs
   std_msgs
+  geometry_msgs trajectory_msgs message_generation
+  #numpy_msg
 )
 
 ## System dependencies are found with CMake's conventions
@@ -63,17 +65,20 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
+add_action_files(
+  DIRECTORY action
+  FILES
+  target_position_report.action
+)
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   sensor_msgs#   std_msgs
-# )
+generate_messages(
+  DEPENDENCIES
+  actionlib_msgs
+  std_msgs
+  geometry_msgs
+  #numpy_msg
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -163,6 +168,8 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/detection.py
+  scripts/target_position_server.py
+  scripts/Test_client.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

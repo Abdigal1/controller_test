@@ -50,11 +50,14 @@ class image_converter:
 
     hsv = cv2.cvtColor(self.cv_image, cv2.COLOR_BGR2HSV)
 
-    _, thresh1 = cv2.threshold(self.cv_image[:, :, 0], 0, 30, cv2.THRESH_BINARY)
-    _, thresh2 = cv2.threshold(self.cv_image[:, :, 1], 200, 255, cv2.THRESH_BINARY)
-    _, thresh3 = cv2.threshold(self.cv_image[:, :, 2], 0, 10, cv2.THRESH_BINARY)
-    _, thresh4 = cv2.threshold(hsv[:, :, 1], 200, 255, cv2.THRESH_BINARY)
-    rthresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
+    _, thresh1 = cv2.threshold(self.cv_image[:, :, 0], 0, 256, cv2.THRESH_BINARY)  #R
+    _, thresh2 = cv2.threshold(self.cv_image[:, :, 1], 0, 256, cv2.THRESH_BINARY)#G
+    _, thresh3 = cv2.threshold(self.cv_image[:, :, 2], 0, 256, cv2.THRESH_BINARY) #B
+    _, thresh4 = cv2.threshold(hsv[:, :, 1], 254, 355, cv2.THRESH_BINARY)          #S 
+    _, thresh5 = cv2.threshold(hsv[:, :, 2], 230, 355, cv2.THRESH_BINARY)          #V 
+    #rthresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
+    rthresh = cv2.bitwise_not(thresh1)
+    rthresh = cv2.bitwise_and(thresh5,cv2.bitwise_not(thresh1))
 
 
     dilatation_size = 7
@@ -84,6 +87,8 @@ class image_converter:
       cx = int(M['m10']/M['m00'])
       cy = int(M['m01']/M['m00'])
       ix =cx + cy*480 #
+      print(self.depth_image[ix])
+      print(np.linalg.norm(self.depth_image[ix]))
       rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
 
 

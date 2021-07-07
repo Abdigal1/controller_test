@@ -1,0 +1,10 @@
+# Define the goal
+bool req  # Specify which dishwasher we want to use
+---
+# Define the result
+#bool done
+geometry_msgs/Pose real_goal
+#uint32 total_dishes_cleaned
+---
+# Define a feedback message
+uint32 dist
