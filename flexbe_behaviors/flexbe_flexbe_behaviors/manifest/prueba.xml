@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Prueba">
+
+	<executable package_path="flexbe_flexbe_behaviors.prueba_sm" class="PruebaSM" />
+	<tagstring></tagstring>
+	<author>yo</author>
+	<date>Sun Jul 04 2021</date>
+	<description>
+		Prueba
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+	<params>
+
+		<param type="numeric" name="position_error" default="0" label="position_error" hint="Sets the position_error">
+			<min value="0" />
+			<max value="1" />
+		</param>
+
+	</params>
+
+
+</behavior>
