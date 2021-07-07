@@ -2,6 +2,7 @@
 <launch>
 
     <arg name="model" default="$(find ensamble_mobile)/urdf/mobile.urdf"/>
+    <!--<arg name="model" default="$(find Ensamble_URDF_2ndT)/urdf/Ensamble_URDF_2ndT.urdf"/>-->
     <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz"/>
     
     <include file="$(find ensamble_mobile)/launch/gazebo.launch">
@@ -79,17 +80,12 @@
       
   </node>
 
-<!--
+
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
     <rosparam command="load" file="$(find ensamble_mobile)/config/ekf_template.yaml" />
 
-    <rosparam param="initial_state">[-9.3,  9.0,  0.0,
-                                 0.0,  0.0,  0.0,
-                                 0.0,  0.0,  0.0,
-                                 0.0,  0.0,  0.0,
-                                 0.0,  0.0,  0.0]</rosparam>
 
   </node>
- -->
+
 
 </launch>

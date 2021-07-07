@@ -4,23 +4,25 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="robot">
-  <link name="map">
-   </link>
+
   <link
-    name="base_link_Chasis">
+    name="base_link">
     <inertial>
       <origin
-        xyz="-0.0112401823918047 0.000443693306025505 0.0601080455071435"
+        xyz="-0.0176250593499407 0.000487296918118385 0.0603462602324048"
         rpy="0 0 0" />
+      <!--                           MASA DE LA BASE                             
       <mass
-        value="5.34447797641956" />
+        value="5.1498884920758" /> ORIGINAL -->
+      <mass
+        value="15.1498884920758" />
       <inertia
-        ixx="0.0273893594112689"
-        ixy="1.69654538422057E-05"
-        ixz="-1.08762432056227E-06"
-        iyy="0.0269594894054598"
-        iyz="8.26864136660382E-08"
-        izz="0.0517209464806407" />
+        ixx="0.0269958762265313"
+        ixy="1.6509880552203E-05"
+        ixz="-6.87240827549635E-07"
+        iyy="0.0269179615683537"
+        iyz="5.19119383098109E-08"
+        izz="0.0513021127607407" />
     </inertial>
     <visual>
       <origin
@@ -28,7 +30,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/base_link_Chasis.STL" />
+          filename="package://ensamble_mobile/meshes/base_link_Chasis.STL" />
       </geometry>
       <material
         name="">
@@ -42,134 +44,24 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/base_link_Chasis.STL" />
+          filename="package://ensamble_mobile/meshes/base_link_Chasis.STL" />
       </geometry>
     </collision>
   </link>
   <link
-    name="Link_1_1_wheel">
+    name="rear_right_wheel">
     <inertial>
       <origin
-        xyz="5.67991416164371E-07 2.82678237431555E-06 -0.0304872070529114"
-        rpy="0 0 0" />
-      <mass
-        value="0.62241947518931" />
-      <inertia
-        ixx="0.000624907057081948"
-        ixy="-3.27878592567662E-09"
-        ixz="4.02329903687644E-11"
-        iyy="0.000624902314874052"
-        iyz="-5.11080571575358E-09"
-        izz="0.00114905854450842" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_1_wheel.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_1_wheel.STL" />
-      </geometry>
-    </collision>
-  </link>
-    <joint name="dummy_joint" type="fixed">
-     <parent link="map"/>
-     <child link="base_link_Chasis"/>
-   </joint>
-  <joint
-    name="joint_1_1_wheel"
-    type="continuous">
-    <origin
-      xyz="-0.12 -0.13348 0.0195"
-      rpy="-1.5708 0 0" />
-    <parent
-      link="base_link_Chasis" />
-    <child
-      link="Link_1_1_wheel" />
-    <axis
-      xyz="0 0 -1" />
-  </joint>
-  <link
-    name="Link_1_2_wheel">
-    <inertial>
-      <origin
-        xyz="2.73809271632286E-06 -9.0341635872182E-07 -0.0321210915173856"
-        rpy="0 0 0" />
-      <mass
-        value="0.62241947518931" />
-      <inertia
-        ixx="0.00062490065579211"
-        ixy="3.60794637957165E-10"
-        ixz="4.42299708533631E-09"
-        iyy="0.00062490871616389"
-        iyz="-2.56106433818635E-09"
-        izz="0.00114905854450842" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_2_wheel.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_2_wheel.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="joint_1_2_wheel"
-    type="continuous">
-    <origin
-      xyz="-0.12 0.196084149285149 0.019499999999999"
-      rpy="-1.5707963267949 0 0" />
-    <parent
-      link="base_link_Chasis" />
-    <child
-      link="Link_1_2_wheel" />
-    <axis
-      xyz="0 0 1" />
-  </joint>
-  <link
-    name="Link_1_3_wheel">
-    <inertial>
-      <origin
-        xyz="2.45343850485691E-06 1.51457992322857E-06 -0.0304872070529117"
+        xyz="5.67991412472879E-07 -2.82678237514822E-06 -0.0308169422322422"
         rpy="0 0 0" />
       <mass
         value="0.622419475189312" />
       <inertia
-        ixx="0.00062490125347859"
-        ixy="-2.14254962013106E-09"
-        ixz="-3.70732769567224E-09"
-        iyy="0.000624908118477413"
-        iyz="-3.51819202590978E-09"
+        ixx="0.00062490705708195"
+        ixy="3.27878592513705E-09"
+        ixz="-4.02329981568964E-11"
+        iyy="0.000624902314874054"
+        iyz="-5.1108057156914E-09"
         izz="0.00114905854450842" />
     </inertial>
     <visual>
@@ -178,7 +70,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_3_wheel.STL" />
+          filename="package://ensamble_mobile/meshes/Link_1_1_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -192,37 +84,93 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_3_wheel.STL" />
+          filename="package://ensamble_mobile/meshes/Link_1_1_wheel.STL" />
       </geometry>
     </collision>
   </link>
+
+
+  <joint name="dummy_joint" type="fixed">
+     <parent link="base_arm"/>
+     <child link="base_link"/>
+   </joint>
+ <link name="base_arm">
+ </link>
+
+
+
+
+
+
+  <link name="rgbd_cam">
+    <inertial>
+      <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <link name="optical">
+  </link>
+
+  <joint name="rgbd_link" type="fixed">
+    <parent link="base_link"/>
+    <child link="rgbd_cam"/>
+    <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>
+  </joint>
+  <joint name="optical_joint" type="fixed">
+    <parent link="rgbd_cam"/>
+    <child link="optical"/>
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5708 0.0 -1.5708"/>   
+  </joint>
+
+
+  <link name="imu_link">
+
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>  
+  </joint>
+
+
+
   <joint
-    name="joint_1_3_wheel"
+    name="joint_rear_right"
     type="continuous">
     <origin
-      xyz="0.0800000000000007 -0.133475850714851 0.0195000000000001"
-      rpy="-1.5707963267949 0 0" />
+      xyz="-0.12 -0.19478 0.0195"
+      rpy="1.5708 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
-      link="Link_1_3_wheel" />
+      link="rear_right_wheel" />
     <axis
       xyz="0 0 -1" />
+    <!--<limit effort="10000" velocity="1000"/>-->
+    <joint_properties damping="0.7"/>
   </joint>
   <link
-    name="Link_1_4_wheel">
+    name="rear_left_wheel">
     <inertial>
       <origin
-        xyz="6.88887376004699E-07 2.79977624520478E-06 -0.0321210915173857"
+        xyz="2.7380927147963E-06 -9.03416358916109E-07 -0.0321210915173869"
         rpy="0 0 0" />
       <mass
-        value="0.622419475189308" />
+        value="0.622419475189309" />
       <inertia
-        ixx="0.000624908723580364"
-        ixy="2.6521354361954E-10"
-        ixz="2.21122175098438E-09"
-        iyy="0.000624900648375635"
-        iyz="4.60786850205311E-09"
+        ixx="0.00062490065579211"
+        ixy="3.60794637909731E-10"
+        ixz="4.42299708576457E-09"
+        iyy="0.000624908716163889"
+        iyz="-2.5610643382685E-09"
         izz="0.00114905854450842" />
     </inertial>
     <visual>
@@ -231,7 +179,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_4_wheel.STL" />
+          filename="package://ensamble_mobile/meshes/Link_1_2_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -245,34 +193,150 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://Ensamble_URDF_2ndT/meshes/Link_1_4_wheel.STL" />
+          filename="package://ensamble_mobile/meshes/Link_1_2_wheel.STL" />
       </geometry>
     </collision>
   </link>
   <joint
-    name="joint_1_4_wheel"
+    name="joint_rear_left"
+    type="continuous">
+    <origin
+      xyz="-0.12 0.19608 0.0195"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rear_left_wheel" />
+    <axis
+      xyz="0 0 1" />
+    <!--<limit effort="10000" velocity="1000"/>-->
+    <joint_properties damping="0.7"/>
+  </joint>
+  <link
+    name="front_right_wheel">
+    <inertial>
+      <origin
+        xyz="2.45343850319157E-06 -1.51457992347837E-06 -0.0308169422322417"
+        rpy="0 0 0" />
+      <mass
+        value="0.622419475189309" />
+      <inertia
+        ixx="0.000624901253478588"
+        ixy="2.14254962065621E-09"
+        ixz="3.7073277047334E-09"
+        iyy="0.00062490811847741"
+        iyz="-3.51819202576334E-09"
+        izz="0.00114905854450842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ensamble_mobile/meshes/Link_1_3_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ensamble_mobile/meshes/Link_1_3_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_front_right"
+    type="continuous">
+    <origin
+      xyz="0.08 -0.19478 0.0195"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_right_wheel" />
+    <axis
+      xyz="0 0 -1" />
+    <!--<limit effort="10000" velocity="1000"/>-->
+    <joint_properties damping="0.7"/>
+  </joint>
+  <link
+    name="front_left_wheel">
+    <inertial>
+      <origin
+        xyz="6.88887376976144E-07 2.79977624487171E-06 -0.0321210915173852"
+        rpy="0 0 0" />
+      <mass
+        value="0.622419475189309" />
+      <inertia
+        ixx="0.000624908723580364"
+        ixy="2.65213544825715E-10"
+        ixz="2.21122175396398E-09"
+        iyy="0.000624900648375636"
+        iyz="4.60786850214148E-09"
+        izz="0.00114905854450842" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ensamble_mobile/meshes/Link_1_4_wheel.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.0752941176470588 0.0752941176470588 0.0752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://ensamble_mobile/meshes/Link_1_4_wheel.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_front_left"
     type="continuous">
     <origin
       xyz="0.08 0.19608 0.0195"
       rpy="-1.5708 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
-      link="Link_1_4_wheel" />
+      link="front_left_wheel" />
     <axis
       xyz="0 0 1" />
+    <!--<limit effort="10000" velocity="1000"/>-->
+    <joint_properties damping="0.7"/>
   </joint>
-
-
-
-
-
-
-
-
-
-
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <link
     name="Link_2_Arm">
     <inertial>
@@ -320,7 +384,7 @@
       xyz="0 0 0.098503"
       rpy="0 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
       link="Link_2_Arm" />
     <axis
@@ -386,7 +450,7 @@
       xyz="0.034278 0 0.99941" />
     <dynamics damping="0.1" friction="0.0"/>
     <limit
-      lower="-0.6"
+      lower="-1.6"
       upper="1.4"
       effort="100"
       velocity="100" />
@@ -445,7 +509,7 @@
       xyz="-0.034278 0 -0.99941" />
     <dynamics damping="0.1" friction="0.0"/>
     <limit
-      lower="-1.57"
+      lower="-1.87"
       upper="1.2"
       effort="100"
       velocity="100" />
@@ -505,57 +569,76 @@
       xyz="-0.034278 0 -0.99941" />
     <dynamics damping="0.1" friction="0.01"/>
     <limit
-      lower="-2.8"
-      upper="2.8"
+      lower="-2.5"
+      upper="2.5"
       effort="100"
       velocity="100" />
   </joint>
 
-  <transmission name="transmission_1_1_wheel">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <transmission name="transmission_rear_right">
     <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="motor_1_1_wheel">
+    <actuator name="motor_rear_right">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>75</mechanicalReduction>
     </actuator>
-    <joint name="joint_1_1_wheel">
-      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    <joint name="joint_rear_right">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
   </transmission>
-  <transmission name="transmission_1_2_wheel">
+  <transmission name="transmission_rear_left">
     <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="motor_1_2_wheel">
+    <actuator name="motor_rear_left">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>75</mechanicalReduction>
     </actuator>
-    <joint name="joint_1_2_wheel">
-      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    <joint name="joint_rear_left">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
   </transmission>
-  <transmission name="transmission_1_3_wheel">
+  <transmission name="transmission_front_right">
     <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="motor_1_3_wheel">
+    <actuator name="motor_front_right">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>75</mechanicalReduction>
     </actuator>
-    <joint name="joint_1_3_wheel">
-      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    <joint name="joint_front_right">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
   </transmission>
-  <transmission name="transmission_1_4_wheel">
+  <transmission name="transmission_front_left">
     <type>transmission_interface/SimpleTransmission</type>
-    <actuator name="motor_1_4_wheel">
+    <actuator name="motor_front_left">
       <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
       <mechanicalReduction>75</mechanicalReduction>
     </actuator>
-    <joint name="joint_1_4_wheel">
-      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+    <joint name="joint_front_left">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
   </transmission>
-
-
-
-
-
 
 
 
@@ -606,21 +689,139 @@
 
 
 
+  <gazebo reference="base_link">
+    <material>Gazebo/Orange</material>
+  </gazebo>
+  <gazebo reference="rear_right_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="rear_left_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="front_right_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="front_left_wheel">
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="rgbd_cam">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="Link_2_Arm">
+    <ambient>0.46 0.46 0.46 1.0</ambient>
+    <diffuse>0.46 0.46 0.46 1.0</diffuse>
+    <specular>0.46 0.46 0.46 1.0</specular>
+    <emissive>0.46 0.46 0.46 1.0</emissive>
+  </gazebo>
+  <gazebo reference="Link_3_Arm">
+    <ambient>0.46 0.46 0.46 1.0</ambient>
+    <diffuse>0.46 0.46 0.46 1.0</diffuse>
+    <specular>0.46 0.46 0.46 1.0</specular>
+    <emissive>0.46 0.46 0.46 1.0</emissive>
+  </gazebo>
+  <gazebo reference="Link_4_Arm">
+    <ambient>0.46 0.46 0.46 1.0</ambient>
+    <diffuse>0.46 0.46 0.46 1.0</diffuse>
+    <specular>0.46 0.46 0.46 1.0</specular>
+    <emissive>0.46 0.46 0.46 1.0</emissive>
+  </gazebo>
+  <gazebo reference="Link_5_Arm">
+    <ambient>0.46 0.46 0.46 1.0</ambient>
+    <diffuse>0.46 0.46 0.46 1.0</diffuse>
+    <specular>0.46 0.46 0.46 1.0</specular>
+    <emissive>0.46 0.46 0.46 1.0</emissive>
+  </gazebo>
 
 
 
 
-
-
-
-  
   <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/robot</robotNamespace>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
-  
+
+
+
+
+
+
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>50.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+
+
+
+
+
+
+
+  <gazebo reference="rgbd_cam">
+    <sensor type="depth" name="camera">  
+      <pose>0.0 0.0 0.0 1.0 0.0 0.0</pose>     
+      <always_on>true</always_on>
+      <visualize>true</visualize>             
+      <camera>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
+          </image>
+          <depth_camera>
+          </depth_camera>
+          <clip>
+              <near>0.001</near>
+              <far>3.0</far>
+          </clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">
+          <baseline>0.2</baseline>
+          <alwaysOn>true</alwaysOn>
+              <updateRate>10.0</updateRate>
+              <cameraName>/</cameraName>
+              <frameName>optical</frameName>                   
+          <imageTopicName>rgb/image</imageTopicName>
+          <depthImageTopicName>depth/image</depthImageTopicName>
+          <pointCloudTopicName>depth/points</pointCloudTopicName>
+          <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>              
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>            
+          <pointCloudCutoff>0.4</pointCloudCutoff>                
+              <hackBaseline>0.07</hackBaseline>
+              <distortionK1>0.0</distortionK1>
+              <distortionK2>0.0</distortionK2>
+              <distortionK3>0.0</distortionK3>
+              <distortionT1>0.0</distortionT1>
+              <distortionT2>0.0</distortionT2>
+          <CxPrime>0.0</CxPrime>
+          <Cx>0.0</Cx>
+          <Cy>0.0</Cy>
+          <Or>0.0</Or>
+          <Op>1.5708</Op>
+          <Oy>0.0</Oy>
+          <focalLength>0.0</focalLength>
+          </plugin>
+    </sensor>
+  </gazebo>
 
 
   

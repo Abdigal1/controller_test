@@ -6,7 +6,7 @@
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
-  <arg name="model" default="$(find ensamble_mobile)/urdf/mobile.urdf"/>
+  <arg name="model" default="$(find Ensamble_URDF_2ndT)/urdf/Ensamble_URDF_2ndT.urdf"/>
   
   <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
 
