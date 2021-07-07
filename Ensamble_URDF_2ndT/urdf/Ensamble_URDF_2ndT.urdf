@@ -4,8 +4,8 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="robot">
-  <!--<link name="map">
-   </link>-->
+  <link name="base_arm">
+   </link>
   <link
     name="base_link">
     <inertial>
@@ -89,11 +89,10 @@
       </geometry>
     </collision>
   </link>
-    <!--<joint name="dummy_joint" type="fixed">
-     <parent link="map"/>
+  <joint name="dummy_joint" type="fixed">
+     <parent link="base_arm"/>
      <child link="base_link"/>
-   </joint>-->
-
+   </joint>
 
 
 
@@ -383,7 +382,7 @@
       xyz="0 0 0.098503"
       rpy="0 0 0" />
     <parent
-      link="base_link" />
+      link="base_arm" />
     <child
       link="Link_2_Arm" />
     <axis
