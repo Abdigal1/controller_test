@@ -68,7 +68,14 @@
   </node>
 
 
-
+  <node pkg="rtabmap_ros" type="rgbd_odometry" name="rgbd_odometry">
+    <!--<param name="frame_id" value="base_arm"/>-->
+    <param name="publish_tf" type="bool" value="false"/>
+    <remap from="odom" to="visual/odom"/>
+    
+    
+    
+  </node>
 
   <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
       <remap from="cloud_in" to="depth/points"/>
