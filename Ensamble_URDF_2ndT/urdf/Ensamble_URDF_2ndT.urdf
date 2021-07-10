@@ -786,7 +786,7 @@
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
               <updateRate>10.0</updateRate>
-              <cameraName>camera</cameraName>
+              <cameraName></cameraName>
               <frameName>optical</frameName>                   
           <imageTopicName>rgb/image_raw</imageTopicName>
           <depthImageTopicName>depth/image_raw</depthImageTopicName>

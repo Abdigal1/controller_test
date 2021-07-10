@@ -4,12 +4,15 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot
   name="robot">
-  <link name="map">
+<!--  <link name="map">
    </link>
-  <link name="optical">
-  </link>
+  <joint name="dummy_joint" type="fixed">
+    <parent link="map"/>
+    <child link="base_link"/>
+  </joint>-->
+
   <link
-    name="base_link_Chasis">
+    name="base_link">
     <inertial>
       <origin
         xyz="-0.0176250593499407 0.000487296918118385 0.0603462602324048"
@@ -91,10 +94,6 @@
       </geometry>
     </collision>
   </link>
-    <joint name="dummy_joint" type="fixed">
-     <parent link="map"/>
-     <child link="base_link_Chasis"/>
-   </joint>
 
 
 
@@ -117,19 +116,29 @@
     </visual>
   </link>
 
+  <link name="optical">
+
+  </link>
+
   <joint name="rgbd_link" type="fixed">
-    <parent link="base_link_Chasis"/>
+    <parent link="base_link"/>
     <child link="rgbd_cam"/>
     <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>
   </joint>
   <joint name="optical_joint" type="fixed">
     <parent link="rgbd_cam"/>
     <child link="optical"/>
-    <origin xyz="0.0 0.0 0.0" rpy="-1.5708 0.0 -1.5708"/>   
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5708 0.0 -1.5708"/>  
   </joint>
 
+  <link name="imu_link">
 
-
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.221 0.0 0.045" rpy="0.0 0.0 0.0"/>  
+  </joint>
 
 
 
@@ -140,7 +149,7 @@
       xyz="-0.12 -0.19478 0.0195"
       rpy="1.5708 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
       link="rear_right_wheel" />
     <axis
@@ -195,7 +204,7 @@
       xyz="-0.12 0.19608 0.0195"
       rpy="-1.5708 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
       link="rear_left_wheel" />
     <axis
@@ -250,7 +259,7 @@
       xyz="0.08 -0.19478 0.0195"
       rpy="1.5708 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
       link="front_right_wheel" />
     <axis
@@ -305,7 +314,7 @@
       xyz="0.08 0.19608 0.0195"
       rpy="-1.5708 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
       link="front_left_wheel" />
     <axis
@@ -375,7 +384,7 @@
       xyz="0 0 0.098503"
       rpy="0 0 0" />
     <parent
-      link="base_link_Chasis" />
+      link="base_link" />
     <child
       link="Link_2_Arm" />
     <axis
@@ -680,7 +689,7 @@
 
 
 
-  <gazebo reference="base_link_Chasis">
+  <gazebo reference="base_link">
     <material>Gazebo/Orange</material>
   </gazebo>
   <gazebo reference="rear_right_wheel">
@@ -736,6 +745,37 @@
 
 
 
+
+
+
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>50.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+
+
+
+
+
+
+
   <gazebo reference="rgbd_cam">
     <sensor type="depth" name="camera">  
       <pose>0.0 0.0 0.0 1.0 0.0 0.0</pose>     
@@ -751,18 +791,18 @@
           <depth_camera>
           </depth_camera>
           <clip>
-              <near>0.1</near>
-              <far>3</far>
+              <near>0.001</near>
+              <far>3.0</far>
           </clip>
       </camera>
       <plugin name="camera_controller" filename="libgazebo_ros_openni_kinect.so">
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
               <updateRate>10.0</updateRate>
-              <cameraName>camera</cameraName>
+              <cameraName>/</cameraName>
               <frameName>optical</frameName>                   
-          <imageTopicName>rgb/image_raw</imageTopicName>
-          <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <imageTopicName>rgb/image</imageTopicName>
+          <depthImageTopicName>depth/image</depthImageTopicName>
           <pointCloudTopicName>depth/points</pointCloudTopicName>
           <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>              
           <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>            

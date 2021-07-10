@@ -35,8 +35,9 @@
   </include>
 
   <!-- If needed, broadcast static tf for robot root -->
+  <!--
    <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" ns="robot" args="0 0 0 0 0 0 world base_arm 100" />
-
+-->
   <!-- We do not have a robot connected, so publish fake joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
     <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
@@ -89,5 +90,67 @@
   <include file="$(find MI_conf)/launch/default_warehouse_db.launch" if="$(arg db)">
     <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
   </include>
+<arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig) -f odom"/>
+  
+
+    <arg
+      name="gui"
+      default="true" />
+  <!--
+  <param
+    name="robot_description"
+    command="$(find xacro)/xacro $(arg model)" />
+  <param
+    name="use_gui"
+    value="$(arg gui)" />-->
+  
+  <!--
+  <node
+    name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher" />
+  -->
+
+
+
+    <!--
+    <rosparam command="load" file="$(find Ensamble_URDF_2ndT)/config/joint_names_Ensamble_URDF_2ndT.yaml"/>
+    -->
+
+
+  <rosparam command="load" file="$(find ensamble_mobile)/config/diff_drive.yaml"/>
+    <node name="robot_arm_controller_spawner" pkg="controller_manager" type="spawner" output="screen" respawn="true"
+  ns="robot" args="diff_drive_controller
+                  joint_state_controller"/>
+
+
+
+
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
+        
+  </node>
+
+
+
+
+  <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
+      <remap from="cloud_in" to="depth/points"/>
+      <param name="range_min" value="0.001"/>
+      <param name="range_max" value="3.0"/>
+      <param name="target_frame" value="base_arm"/>
+      
+      
+      
+  </node>
+
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+    <rosparam command="load" file="$(find ensamble_mobile)/config/ekf_template.yaml" />
+
+
+  </node>
+
 
 </launch>

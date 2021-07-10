@@ -1,20 +1,35 @@
 digraph G {
 node [shape=box];
-"map" [label="map"];
 "base_link_Chasis" [label="base_link_Chasis"];
-"Link_1_1_wheel" [label="Link_1_1_wheel"];
-"Link_1_2_wheel" [label="Link_1_2_wheel"];
-"Link_1_3_wheel" [label="Link_1_3_wheel"];
-"Link_1_4_wheel" [label="Link_1_4_wheel"];
+"Link_2_Arm" [label="Link_2_Arm"];
+"Link_3_Arm" [label="Link_3_Arm"];
+"Link_4_Arm" [label="Link_4_Arm"];
+"Link_5_Arm" [label="Link_5_Arm"];
+"front_left_wheel" [label="front_left_wheel"];
+"front_right_wheel" [label="front_right_wheel"];
+"rear_left_wheel" [label="rear_left_wheel"];
+"rear_right_wheel" [label="rear_right_wheel"];
+"optical" [label="optical"];
+"rgbd_cam" [label="rgbd_cam"];
 node [shape=ellipse, color=blue, fontcolor=blue];
-"map" -> "dummy_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
-"dummy_joint" -> "base_link_Chasis"
-"base_link_Chasis" -> "joint_1_1_wheel" [label="xyz: -0.12 -0.13348 0.0195 \nrpy: -1.5708 0 0"]
-"joint_1_1_wheel" -> "Link_1_1_wheel"
-"base_link_Chasis" -> "joint_1_2_wheel" [label="xyz: -0.12 0.196084 0.0195 \nrpy: -1.5708 0 0"]
-"joint_1_2_wheel" -> "Link_1_2_wheel"
-"base_link_Chasis" -> "joint_1_3_wheel" [label="xyz: 0.08 -0.133476 0.0195 \nrpy: -1.5708 0 0"]
-"joint_1_3_wheel" -> "Link_1_3_wheel"
-"base_link_Chasis" -> "joint_1_4_wheel" [label="xyz: 0.08 0.19608 0.0195 \nrpy: -1.5708 0 0"]
-"joint_1_4_wheel" -> "Link_1_4_wheel"
+"base_link_Chasis" -> "joint_2_Arm" [label="xyz: 0 0 0.098503 \nrpy: 0 -0 0"]
+"joint_2_Arm" -> "Link_2_Arm"
+"Link_2_Arm" -> "joint_3_Arm" [label="xyz: 0.063383 0.0021739 0.12369 \nrpy: 1.5708 -0 0"]
+"joint_3_Arm" -> "Link_3_Arm"
+"Link_3_Arm" -> "joint_4_Arm" [label="xyz: 0.060241 0.1907 -0.0020662 \nrpy: 0 -0 0"]
+"joint_4_Arm" -> "Link_4_Arm"
+"Link_4_Arm" -> "joint_5_Arm" [label="xyz: 0.21278 -0.0095961 -0.0037813 \nrpy: 0 -0 0"]
+"joint_5_Arm" -> "Link_5_Arm"
+"base_link_Chasis" -> "joint_front_left" [label="xyz: 0.08 0.19608 0.0195 \nrpy: -1.5708 0 0"]
+"joint_front_left" -> "front_left_wheel"
+"base_link_Chasis" -> "joint_front_right" [label="xyz: 0.08 -0.19478 0.0195 \nrpy: 1.5708 -0 0"]
+"joint_front_right" -> "front_right_wheel"
+"base_link_Chasis" -> "joint_rear_left" [label="xyz: -0.12 0.19608 0.0195 \nrpy: -1.5708 0 0"]
+"joint_rear_left" -> "rear_left_wheel"
+"base_link_Chasis" -> "joint_rear_right" [label="xyz: -0.12 -0.19478 0.0195 \nrpy: 1.5708 -0 0"]
+"joint_rear_right" -> "rear_right_wheel"
+"base_link_Chasis" -> "optical_joint" [label="xyz: 0.221 0 0.045 \nrpy: -1.5708 -0 -1.5708"]
+"optical_joint" -> "optical"
+"base_link_Chasis" -> "rgbd_link" [label="xyz: 0.221 0 0.045 \nrpy: 0 -0 0"]
+"rgbd_link" -> "rgbd_cam"
 }

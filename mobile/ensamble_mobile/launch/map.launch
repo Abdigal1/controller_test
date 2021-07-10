@@ -1,0 +1,42 @@
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find ensamble_mobile)/urdf/mobile.urdf'"/>
+
+
+
+
+    <arg name="gui" default="False" />
+   <param name="use_gui" value="$(arg gui)"/>
+   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" ns="robot"></node>
+
+
+   <node name="rviz" pkg="rviz" type="rviz" />
+
+   
+      <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
+      <remap from="cloud_in" to="depth/points"/>
+      <param name="range_min" value="0.001"/>
+      <param name="range_max" value="3.0"/>
+      <param name="target_frame" value="base_link"/>
+      
+      
+      
+  </node>
+
+  <rosparam command="load" file="$(find ensamble_mobile)/config/diff_drive.yaml"/>
+
+  
+  <node name="robot_arm_controller_spawner" pkg="controller_manager" type="spawner" output="screen" respawn="true"
+  ns="robot" args="diff_drive_controller
+                  joint_state_controller"/>
+        
+     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+      respawn="false" ns="robot" output="screen">
+  </node>
+
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
+        
+  </node>
+
+
+</launch>
