@@ -565,7 +565,7 @@
       link="Link_5_Arm" />
     <axis
       xyz="-0.034278 0 -0.99941" />
-    <dynamics damping="0.1" friction="0.01"/>
+    <dynamics damping="0.0" friction="0.01"/>
     <limit
       lower="-2.5"
       upper="2.5"
