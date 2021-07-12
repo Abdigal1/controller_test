@@ -1,0 +1,8 @@
+# Define the goal
+bool req
+---
+# Define the result
+bool done
+---
+# Define a feedback message
+uint32 dist

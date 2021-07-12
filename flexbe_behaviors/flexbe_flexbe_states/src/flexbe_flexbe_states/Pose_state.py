@@ -32,12 +32,8 @@ class PositionActionState(EventState):
 		super(PositionActionState, self).__init__(outcomes = ['goal','no_goal','command_error'],
 												 input_keys = ['pose_goal'],
 												 output_keys = ['position_error'])
-		#super(ExampleActionState, self).__init__(outcomes = ['cleaned_some', 'cleaned_enough', 'command_error'],
-		#										 input_keys = ['dishwasher'],
-		#										 output_keys = ['cleaned'])
-		#super(PositionActionState, self).__init__(outcomes = ['goal','no_goal'],
-	#											 input_keys = ['Pose_goal'],
-	#											 output_keys = ['position_error'])
+
+
 
 		self._positional_error = positional_error
 		self._topic_pos = 'generate_position'

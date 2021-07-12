@@ -87,10 +87,10 @@
 -->
 
   <!-- If database loading was enabled, start mongodb as well -->
-  <include file="$(find MI_conf)/launch/default_warehouse_db.launch" if="$(arg db)">
+  <!--<include file="$(find MI_conf)/launch/default_warehouse_db.launch" if="$(arg db)">
     <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
-  </include>
-<arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz"/>
+  </include>-->
+<arg name="rvizconfig" default="$(find Ensamble_URDF_2ndT)/config/robot.rviz"/>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig) -f odom"/>
   
 
@@ -125,13 +125,14 @@
                   joint_state_controller"/>
 
 
-
+<!--
 
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
     <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
+    
         
   </node>
-
+-->
 
 
 

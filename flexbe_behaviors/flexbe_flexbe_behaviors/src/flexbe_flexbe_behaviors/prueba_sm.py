@@ -8,6 +8,7 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
+from flexbe_flexbe_states.Navigation_state import NavigationActionState
 from flexbe_flexbe_states.Pose_state import PositionActionState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -44,7 +45,7 @@ class PruebaSM(Behavior):
 
 
 	def create(self):
-		# x:895 y:316, x:908 y:233
+		# x:828 y:575, x:908 y:233
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
 		_state_machine.userdata.positional_error = 0.0
 		_state_machine.userdata.pose_goal = "prueba"
@@ -56,7 +57,14 @@ class PruebaSM(Behavior):
 
 
 		with _state_machine:
-			# x:383 y:176
+			# x:217 y:295
+			OperatableStateMachine.add('Nav',
+										NavigationActionState(positional_error=0.1),
+										transitions={'target_detected': 'A', 'command_error': 'failed'},
+										autonomy={'target_detected': Autonomy.Off, 'command_error': Autonomy.Off},
+										remapping={'pose_goal': 'pose_goal', 'position_error': 'position_error'})
+
+			# x:479 y:495
 			OperatableStateMachine.add('A',
 										PositionActionState(positional_error=0.1),
 										transitions={'goal': 'finished', 'no_goal': 'A', 'command_error': 'failed'},
