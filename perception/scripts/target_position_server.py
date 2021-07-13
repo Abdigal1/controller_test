@@ -27,7 +27,7 @@ class image_converter:
     self.image_pub = rospy.Publisher("/rgb/process_1",Image)
 
     self.bridge = CvBridge()
-    self.image_sub = message_filters.Subscriber("/rgb/image",Image)
+    self.image_sub = message_filters.Subscriber("/rgb/image_raw",Image)
     self.depth_sub = message_filters.Subscriber("/depth/points",PointCloud2)
     self.cv_image = None
     self.depth_image = None
@@ -97,9 +97,7 @@ class image_converter:
       cx = int(M['m10']/M['m00'])
       cy = int(M['m01']/M['m00'])
       ix =cx + cy*480 #
-      print(self.depth_image[ix])
-      print(np.linalg.norm(self.depth_image[ix]))
-      rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
+      #rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
       self.target_position=self.depth_image[ix]
 
     try:
@@ -119,20 +117,29 @@ class Report_position_server(object):
 
   def execute(self, goal):
     # Do lots of awesome groundbreaking robot stuff here
-    print("execute")
+    #print("execute")
     print(goal)
     
     if goal:
-      if np.linalg.norm(self.ic.target_position)<1.5:
+      if np.linalg.norm(self.ic.target_position)<1:
         rospy.loginfo("Target detected")
         pose=geometry_msgs.msg.Pose()
         pose.position.x=self.ic.target_position[0]
         pose.position.y=self.ic.target_position[1]
-        pose.position.z=self.ic.target_position[2]
+        pose.position.z=0.25
         print(pose)
         print(self._result)
+        self._result.result.range=True
         self._result.result.real_goal=pose
         print(self._result)
+      else:
+        self._result.result.range=False
+        print("distance")
+        print(np.linalg.norm(self.ic.target_position))
+        print("TARGET OUT OF RANGE")
+        print(self._result.result)
+    else:
+      print("NO TARGET")
     #self.server.set_succeeded(self._result)
     self.server.set_succeeded(self._result.result)
 

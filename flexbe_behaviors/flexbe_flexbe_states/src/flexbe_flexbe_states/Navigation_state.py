@@ -10,6 +10,10 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from Planning.msg import PositionAction, PositionGoal
 from Planning.msg import RandomPositionAction, RandomPositionGoal
 from test_utils.msg import GenericSignalAction,GenericSignalGoal, GenericSignalActionResult, GenericSignalActionFeedback
+
+from perception.msg import target_position_reportAction, target_position_reportGoal
+from perception.msg import target_position_reportAction, target_position_reportActionResult, target_position_reportActionFeedback
+
 import numpy as np
 
 import geometry_msgs
@@ -24,9 +28,12 @@ class NavigationActionState(EventState):
 		self.interrupt_navigation=False
 		self.step=0
 		self._topic = 'move_base'
-		self._client = ProxyActionClient({self._topic: MoveBaseAction})
+		self._topic_report = 'report_target_position'
 		self._topic_sig = 'generate_signal'
-		self._client_sig = ProxyActionClient({self._topic_sig: GenericSignalAction})
+		self._client = ProxyActionClient({self._topic: MoveBaseAction, self._topic_report: target_position_reportAction})
+		#self._client = ProxyActionClient({self._topic: MoveBaseAction, self._topic_sig: GenericSignalAction})
+		#self._topic_sig = 'generate_signal'
+		#self._client_sig = ProxyActionClient({self._topic_sig: GenericSignalAction})
 		self._error = False
 		self.rate = rospy.Rate(0.2)
 		#                          x,y,z_r,w
@@ -52,47 +59,47 @@ class NavigationActionState(EventState):
 		if self._error:
 			return 'command_error'
 
-		#if self._client.has_result(self._topic):
-			#result = self._client.get_result(self._topic)
-			#rand_pose = self._client_pos.get_result(self._topic_pos)
-            #Resultado de Vision Artificial
+		#GenSig=GenericSignalGoal()
+		#GenSig.req=True
+		#self.rate.sleep()
+		#self.rate.sleep()
 
-		#	print("error posicional")
-		#	print(userdata.position_error)
-#
-		#	if userdata.position_error < self._positional_error:
-		#		return 'goal'
-		#	else:
-		#		return 'no_goal'
+		pose_goal=target_position_reportGoal()
+		pose_goal.req=True
 
+		self._client.send_goal(self._topic_report, pose_goal)
 
-		GenSig=GenericSignalGoal()
-		GenSig.req=True
-		self.rate.sleep()
-		self.rate.sleep()
-		#while self.interrupt_navigation==False:
-		#	self._client_sig.send_goal(self._topic_sig, GenSig) #Sim
-		#	print("sleep")
-		#	self.rate.sleep()
+		#self._client.send_goal(self._topic_sig, GenSig) #Sim
+		#self.rate.sleep()
+
+		#print("has result:")
+		#print(self._client.has_result(self._topic_sig))
+		#if self._client_sig.has_result(self._topic_sig):
+		#	print("new result!")
 		#	result = self._client_sig.get_result(self._topic_sig) #Sim
-		#	#print(result.done)
+		#	print("result")
+		#	print(result)
 		#	self.interrupt_navigation = result.done
-
-		self._client_sig.send_goal(self._topic_sig, GenSig) #Sim
-		self.rate.sleep()
-		print("has result:")
-		print(self._client_sig.has_result(self._topic_sig))
-		if self._client_sig.has_result(self._topic_sig):
+		#print(self._client.has_result(self._topic_report))
+		#self.rate.sleep()
+		client=self._client._clients.get(self._topic_report)
+		print("wating")
+		client.wait_for_result()
+		print("result ready")
+		result = self._client.get_result(self._topic_report)
+		#if self._client.has_result(self._topic_report):
+		if result.range:
 			print("new result!")
-			result = self._client_sig.get_result(self._topic_sig) #Sim
-			print("result")
-			print(result)
-			self.interrupt_navigation = result.done
+			#result = self._client.get_result(self._topic_report)
+			#print("result")
+			#print(result)
+			self.interrupt_navigation = True
 
 		if self.interrupt_navigation==True:
 			print("aborting")
 			self._client.cancel(self._topic)
 			print("cancled goal")
+			self.interrupt_navigation = False
 			return 'target_detected'
 		
 

@@ -21,7 +21,7 @@ class image_converter:
     self.image_pub = rospy.Publisher("/rgb/process_1",Image)
 
     self.bridge = CvBridge()
-    self.image_sub = message_filters.Subscriber("/rgb/image",Image)
+    self.image_sub = message_filters.Subscriber("/rgb/image_raw",Image)
     self.depth_sub = message_filters.Subscriber("/depth/points",PointCloud2)
     self.cv_image = None
     self.depth_image = None
@@ -90,8 +90,6 @@ class image_converter:
       print(self.depth_image[ix])
       print(np.linalg.norm(self.depth_image[ix]))
       rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
-
-
 
 
     cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
