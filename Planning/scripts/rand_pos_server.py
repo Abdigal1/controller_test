@@ -21,15 +21,14 @@ class Generate_position_server(object):
   def execute(self, goal):
     # Do lots of awesome groundbreaking robot stuff here
     print(goal)
-    if goal:
+    if goal.req:
         np.random.uniform(low=0,high=0.5)
         pose=geometry_msgs.msg.Pose()
         pose.position.x=np.random.uniform(low=-0.5,high=0.5)
         pose.position.y=np.random.uniform(low=-0.5,high=0.5)
         pose.position.z=0.25
-        print(pose)
-        print(self._result)
         self._result.result.real_goal=pose
+        print("result")
         print(self._result)
     #self.server.set_succeeded(self._result)
     self.server.set_succeeded(self._result.result)

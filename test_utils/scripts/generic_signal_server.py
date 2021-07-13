@@ -17,12 +17,14 @@ class Generate_signal_server(object):
 
   def execute(self, goal):
     # Do lots of awesome groundbreaking robot stuff here
+    print("recieved goal")
     print(goal)
-    if goal:
+    if goal.req:
         Res=True
-        print(Res)
+        print("b result")
         print(self._result)
         self._result.result.done=Res
+        print("a result")
         print(self._result)
     #self.server.set_succeeded(self._result)
     self.server.set_succeeded(self._result.result)

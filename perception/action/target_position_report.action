@@ -1,6 +1,5 @@
 # Define the goal
-string command
-geometry_msgs/Pose goal  # Specify which dishwasher we want to use
+bool req  # Specify which dishwasher we want to use
 ---
 # Define the result
 #bool done

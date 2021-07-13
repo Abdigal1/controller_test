@@ -8,8 +8,6 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
-from flexbe_flexbe_states.Initial_state import InitActionState
-from flexbe_flexbe_states.Navigation_state import NavigationActionState
 from flexbe_flexbe_states.Pose_state import PositionActionState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -18,21 +16,20 @@ from flexbe_flexbe_states.Pose_state import PositionActionState
 
 
 '''
-Created on Sun Jul 04 2021
-@author: yo
+Created on Mon Jul 12 2021
+@author: Guillermo
 '''
-class PruebaSM(Behavior):
+class Manip_bSM(Behavior):
 	'''
-	Prueba
+	manipulator state Debugger
 	'''
 
 
 	def __init__(self):
-		super(PruebaSM, self).__init__()
-		self.name = 'Prueba'
+		super(Manip_bSM, self).__init__()
+		self.name = 'Manip_b'
 
 		# parameters of this behavior
-		self.add_parameter('position_error', 0)
 
 		# references to used behaviors
 
@@ -46,10 +43,10 @@ class PruebaSM(Behavior):
 
 
 	def create(self):
-		# x:828 y:575, x:908 y:233
+		# x:740 y:235, x:745 y:88
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
-		_state_machine.userdata.positional_error = 0.0
-		_state_machine.userdata.pose_goal = "prueba"
+		_state_machine.userdata.pose_goal = 1
+		_state_machine.userdata.pose_error = 1
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -58,25 +55,12 @@ class PruebaSM(Behavior):
 
 
 		with _state_machine:
-			# x:59 y:43 {?input_keys = 0,?output_keys = 0}
-			OperatableStateMachine.add('Inicio',
-										InitActionState(),
-										transitions={'ready': 'Nav', 'command_error': 'failed'},
-										autonomy={'ready': Autonomy.Off, 'command_error': Autonomy.Off})
-
-			# x:243 y:145
-			OperatableStateMachine.add('Nav',
-										NavigationActionState(positional_error=0.1),
-										transitions={'target_detected': 'A', 'command_error': 'failed'},
-										autonomy={'target_detected': Autonomy.Off, 'command_error': Autonomy.Off},
-										remapping={'pose_goal': 'pose_goal', 'position_error': 'position_error'})
-
-			# x:412 y:246
-			OperatableStateMachine.add('A',
+			# x:206 y:100
+			OperatableStateMachine.add('Position',
 										PositionActionState(positional_error=0.1),
-										transitions={'goal': 'Nav', 'no_goal': 'A', 'command_error': 'failed'},
+										transitions={'goal': 'finished', 'no_goal': 'Position', 'command_error': 'failed'},
 										autonomy={'goal': Autonomy.Off, 'no_goal': Autonomy.Off, 'command_error': Autonomy.Off},
-										remapping={'pose_goal': 'pose_goal', 'position_error': 'positional_error'})
+										remapping={'pose_goal': 'pose_goal', 'position_error': 'pose_error'})
 
 
 		return _state_machine

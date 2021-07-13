@@ -68,6 +68,8 @@ class NavigationActionState(EventState):
 
 		GenSig=GenericSignalGoal()
 		GenSig.req=True
+		self.rate.sleep()
+		self.rate.sleep()
 		#while self.interrupt_navigation==False:
 		#	self._client_sig.send_goal(self._topic_sig, GenSig) #Sim
 		#	print("sleep")
@@ -76,13 +78,16 @@ class NavigationActionState(EventState):
 		#	#print(result.done)
 		#	self.interrupt_navigation = result.done
 
-		#self._client_sig.send_goal(self._topic_sig, GenSig) #Sim
-		print("sleep")
+		self._client_sig.send_goal(self._topic_sig, GenSig) #Sim
 		self.rate.sleep()
-		result = self._client_sig.get_result(self._topic_sig) #Sim
-		print("result")
-		print(result.done)
-		self.interrupt_navigation = result.done
+		print("has result:")
+		print(self._client_sig.has_result(self._topic_sig))
+		if self._client_sig.has_result(self._topic_sig):
+			print("new result!")
+			result = self._client_sig.get_result(self._topic_sig) #Sim
+			print("result")
+			print(result)
+			self.interrupt_navigation = result.done
 
 		if self.interrupt_navigation==True:
 			print("aborting")
@@ -103,8 +108,8 @@ class NavigationActionState(EventState):
 		#goal.target_pose.pose.orientation.z = self.trajectory[self.step,2]
 		#goal.target_pose.pose.orientation.w = self.trajectory[self.step,3]
 
-		goal.target_pose.pose.position.x = 11
-		goal.target_pose.pose.position.y = 1.5
+		goal.target_pose.pose.position.x = 11.5
+		goal.target_pose.pose.position.y = -0.5
 		goal.target_pose.pose.orientation.z =0 
 		goal.target_pose.pose.orientation.w = 1
 		self._error = False

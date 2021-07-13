@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Manip_b">
+
+	<executable package_path="flexbe_flexbe_behaviors.manip_b_sm" class="Manip_bSM" />
+	<tagstring></tagstring>
+	<author>Guillermo</author>
+	<date>Mon Jul 12 2021</date>
+	<description>
+		manipulator state Debugger
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>
