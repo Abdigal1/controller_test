@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node name="slam_map" pkg="gmapping" type="slam_gmapping"  output="screen" respawn="false" respawn_delay="0">
+        <param name="base_frame" value="base_arm"/>
+        <param name="map_update_interval"  value="1.0"/>
+        <param name="sigma"  value="0.05"/>
+        <param name="kernelSize"  value="5"/>
+        <param name="astep"  value="25"/>
+        <param name="particles"  value="150"/>
+        <param name="xmin" value="-10"/>
+        <param name="xmax" value="10"/>
+        <param name="ymin" value="-10"/>
+        <param name="ymax" value="10"/>
+         <param name="linearUpdate"  value="5.0"/>
+         
+
+    </node>
+
+</launch>
