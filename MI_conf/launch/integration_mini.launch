@@ -1,0 +1,157 @@
+<launch>
+
+  <!-- By default, we do not start a database (it can be large) -->
+  <arg name="db" default="false" />
+  <!-- Allow user to specify database location -->
+  <arg name="db_path" default="$(find MI_conf)/default_warehouse_mongo_db" />
+
+  <!-- By default, we are not in debug mode -->
+  <arg name="debug" default="false" />
+
+  <!-- By default, we won't load or override the robot_description -->
+  <arg name="load_robot_description" default="false"/>
+
+  <!--
+  By default, hide joint_state_publisher's GUI
+
+  MoveIt!'s "demo" mode replaces the real robot driver with the joint_state_publisher.
+  The latter one maintains and publishes the current joint configuration of the simulated robot.
+  It also provides a GUI to move the simulated robot around "manually".
+  This corresponds to moving around the real robot without the use of MoveIt.
+  -->
+  <arg name="use_gui" default="false" />
+
+  <!-- Gazebo specific options -->
+  <arg name="gazebo_gui" default="true"/>
+  <arg name="paused" default="false"/>
+  <!-- By default, use the urdf location provided from the package -->
+  <arg name="urdf_path" default="$(find Ensamble_URDF_2ndT)/urdf/Ensamble_URDF_2ndT.urdf"/>
+
+  <!-- launch the gazebo simulator and spawn the robot -->
+  <include file="$(find MI_conf)/launch/gazebo_mini.launch" >
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gazebo_gui" value="$(arg gazebo_gui)"/>
+    <arg name="urdf_path" value="$(arg urdf_path)"/>
+  </include>
+
+  <!-- If needed, broadcast static tf for robot root -->
+  <!--
+   <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" ns="robot" args="0 0 0 0 0 0 world base_arm 100" />
+-->
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
+    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+    <remap from="joint_states" to="robot/joint_states"/>
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" ns="robot" if="$(arg use_gui)">
+    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    <rosparam param="source_list">[/joint_states]</rosparam>
+  </node>
+
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" ns="robot" output="screen" />
+
+  <!-- Run the main MoveIt! executable without trajectory execution (we do not have controllers configured by default) -->
+  <include file="$(find MI_conf)/launch/move_group.launch">
+    <arg name="allow_trajectory_execution" value="true"/>
+    <arg name="fake_execution" value="false"/>
+    <arg name="info" value="true"/>
+    <arg name="debug" value="$(arg debug)"/>
+    <arg name="load_robot_description" value="$(arg load_robot_description)"/>
+  </include>  
+
+  <!-- Run Rviz and load the default config to see the state of the move_group node -->
+  <!--
+  <include file="$(find MI_conf)/launch/moveit_rviz.launch">
+    <arg name="rviz_config" value="$(find MI_conf)/launch/moveit.rviz"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+  -->
+
+<!--
+  <rosparam command="load" file="$(find ensamble_mobile)/config/diff_drive.yaml"/>
+
+    <node name="robot_arm_controller_spawner" pkg="controller_manager" type="spawner" output="screen" respawn="true"
+    ns="robot" args="diff_drive_controller
+                  joint_state_controller"/>
+-->
+  <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+      respawn="false" ns="robot" output="screen">
+  </node>-->
+  <!--
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
+        
+  </node>
+-->
+
+  <!-- If database loading was enabled, start mongodb as well -->
+  <!--<include file="$(find MI_conf)/launch/default_warehouse_db.launch" if="$(arg db)">
+    <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
+  </include>-->
+<arg name="rvizconfig" default="$(find Ensamble_URDF_2ndT)/config/robot.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig) -f odom"/>
+  
+
+    <arg
+      name="gui"
+      default="true" />
+  <!--
+  <param
+    name="robot_description"
+    command="$(find xacro)/xacro $(arg model)" />
+  <param
+    name="use_gui"
+    value="$(arg gui)" />-->
+  
+  <!--
+  <node
+    name="joint_state_publisher"
+    pkg="joint_state_publisher"
+    type="joint_state_publisher" />
+  -->
+
+
+
+    <!--
+    <rosparam command="load" file="$(find Ensamble_URDF_2ndT)/config/joint_names_Ensamble_URDF_2ndT.yaml"/>
+    -->
+
+
+  <rosparam command="load" file="$(find ensamble_mobile)/config/diff_drive.yaml"/>
+    <node name="robot_arm_controller_spawner" pkg="controller_manager" type="spawner" output="screen" respawn="true"
+  ns="robot" args="diff_drive_controller
+                  joint_state_controller"/>
+
+
+<!--
+
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/robot/diff_drive_controller/cmd_vel"/>
+    
+        
+  </node>
+-->
+
+
+
+  <node name="pointcloud_to_laserscan_node" pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" output="log">
+      <remap from="cloud_in" to="depth/points"/>
+      <param name="range_min" value="0.001"/>
+      <param name="range_max" value="3.0"/>
+      <param name="target_frame" value="base_arm"/>
+      
+      
+      
+  </node>
+
+
+  <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+    <rosparam command="load" file="$(find ensamble_mobile)/config/ekf_template.yaml" />
+
+
+  </node>
+
+
+</launch>
