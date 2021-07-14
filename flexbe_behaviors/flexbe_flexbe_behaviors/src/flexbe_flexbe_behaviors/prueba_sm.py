@@ -48,8 +48,8 @@ class PruebaSM(Behavior):
 	def create(self):
 		# x:828 y:575, x:908 y:233
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
-		_state_machine.userdata.positional_error = 0.0
-		_state_machine.userdata.pose_goal = "prueba"
+		_state_machine.userdata.B = 0
+		_state_machine.userdata.A = 0
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -58,7 +58,7 @@ class PruebaSM(Behavior):
 
 
 		with _state_machine:
-			# x:59 y:43 {?input_keys = 0,?output_keys = 0}
+			# x:59 y:43
 			OperatableStateMachine.add('Inicio',
 										InitActionState(),
 										transitions={'ready': 'Nav', 'command_error': 'failed'},
@@ -67,16 +67,16 @@ class PruebaSM(Behavior):
 			# x:243 y:145
 			OperatableStateMachine.add('Nav',
 										NavigationActionState(positional_error=0.1),
-										transitions={'target_detected': 'A', 'command_error': 'failed'},
-										autonomy={'target_detected': Autonomy.Off, 'command_error': Autonomy.Off},
-										remapping={'pose_goal': 'pose_goal', 'position_error': 'position_error'})
+										transitions={'target_detected': 'irrigación', 'next_step': 'Nav', 'end': 'finished', 'command_error': 'failed'},
+										autonomy={'target_detected': Autonomy.Off, 'next_step': Autonomy.Off, 'end': Autonomy.Off, 'command_error': Autonomy.Off},
+										remapping={'nav_current_step_in': 'A', 'nav_current_step_out': 'A'})
 
-			# x:412 y:246
-			OperatableStateMachine.add('A',
-										PositionActionState(positional_error=0.1),
-										transitions={'goal': 'Nav', 'no_goal': 'A', 'command_error': 'failed'},
-										autonomy={'goal': Autonomy.Off, 'no_goal': Autonomy.Off, 'command_error': Autonomy.Off},
-										remapping={'pose_goal': 'pose_goal', 'position_error': 'positional_error'})
+			# x:247 y:371
+			OperatableStateMachine.add('irrigación',
+										PositionActionState(positional_error=0.1, shift=0.3),
+										transitions={'goal': 'Nav', 'no_goal': 'irrigación', 'out_of_range': 'failed', 'command_error': 'failed'},
+										autonomy={'goal': Autonomy.Off, 'no_goal': Autonomy.Off, 'out_of_range': Autonomy.Off, 'command_error': Autonomy.Off},
+										remapping={'pos_current_step_in': 'B', 'pos_current_step_out': 'B'})
 
 
 		return _state_machine

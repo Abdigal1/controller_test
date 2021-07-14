@@ -113,6 +113,7 @@ class Report_position_server(object):
     self.server = actionlib.SimpleActionServer('report_target_position', target_position_reportAction, self.execute, False)
     self.server.start()
     self.ic = image_converter()
+    self.th=0.7
     
 
   def execute(self, goal):
@@ -121,17 +122,14 @@ class Report_position_server(object):
     print(goal)
     
     if goal:
-      if np.linalg.norm(self.ic.target_position)<1:
+      if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.2):
         rospy.loginfo("Target detected")
         pose=geometry_msgs.msg.Pose()
         pose.position.x=self.ic.target_position[0]
         pose.position.y=self.ic.target_position[1]
         pose.position.z=0.25
-        print(pose)
-        print(self._result)
         self._result.result.range=True
         self._result.result.real_goal=pose
-        print(self._result)
       else:
         self._result.result.range=False
         print("distance")

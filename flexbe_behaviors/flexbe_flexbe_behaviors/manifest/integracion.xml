@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<behavior name="Integracion">
+
+	<executable package_path="flexbe_flexbe_behaviors.integracion_sm" class="IntegracionSM" />
+	<tagstring></tagstring>
+	<author>Guillermo</author>
+	<date>Wed Jul 14 2021</date>
+	<description>
+		Integration state
+	</description>
+
+
+	<!-- Contained Behaviors -->
+
+	<!-- Available Parameters -->
+
+</behavior>

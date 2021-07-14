@@ -8,7 +8,8 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
-from flexbe_flexbe_states.Pose_state import PositionActionState
+from flexbe_flexbe_states.Initial_state import InitActionState
+from flexbe_flexbe_states.Navigation_state import NavigationActionState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
 
@@ -16,18 +17,18 @@ from flexbe_flexbe_states.Pose_state import PositionActionState
 
 
 '''
-Created on Mon Jul 12 2021
+Created on Tue Jul 13 2021
 @author: Guillermo
 '''
-class Manip_bSM(Behavior):
+class Nav_dbgSM(Behavior):
 	'''
-	manipulator state Debugger
+	Navigation state debugger
 	'''
 
 
 	def __init__(self):
-		super(Manip_bSM, self).__init__()
-		self.name = 'Manip_b'
+		super(Nav_dbgSM, self).__init__()
+		self.name = 'Nav_dbg'
 
 		# parameters of this behavior
 
@@ -43,10 +44,10 @@ class Manip_bSM(Behavior):
 
 
 	def create(self):
-		# x:740 y:235, x:745 y:88
+		# x:710 y:133, x:697 y:376
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
-		_state_machine.userdata.pos_current_step_out = 0
-		_state_machine.userdata.pos_current_step_in = 0
+		_state_machine.userdata.nav_current_step_in = 0
+		_state_machine.userdata.nav_current_step_out = 0
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]
@@ -55,12 +56,18 @@ class Manip_bSM(Behavior):
 
 
 		with _state_machine:
-			# x:206 y:100
-			OperatableStateMachine.add('Position',
-										PositionActionState(positional_error=0.1, shift=0.3),
-										transitions={'goal': 'finished', 'no_goal': 'Position', 'out_of_range': 'finished', 'command_error': 'failed'},
-										autonomy={'goal': Autonomy.Off, 'no_goal': Autonomy.Off, 'out_of_range': Autonomy.Off, 'command_error': Autonomy.Off},
-										remapping={'pos_current_step_in': 'pos_current_step_in', 'pos_current_step_out': 'pos_current_step_out'})
+			# x:114 y:209
+			OperatableStateMachine.add('Inicio',
+										InitActionState(),
+										transitions={'ready': 'Navigation', 'command_error': 'failed'},
+										autonomy={'ready': Autonomy.Off, 'command_error': Autonomy.Off})
+
+			# x:385 y:117
+			OperatableStateMachine.add('Navigation',
+										NavigationActionState(positional_error=0.1),
+										transitions={'target_detected': 'finished', 'next_step': 'Navigation', 'command_error': 'failed'},
+										autonomy={'target_detected': Autonomy.Off, 'next_step': Autonomy.Off, 'command_error': Autonomy.Off},
+										remapping={'nav_current_step_in': 'nav_current_step_in', 'nav_current_step_out': 'nav_current_step_out'})
 
 
 		return _state_machine

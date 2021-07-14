@@ -20,13 +20,13 @@ class To_position_server(object):
   def execute(self, goal):
     # Do lots of awesome groundbreaking robot stuff here
     print("recieved in server")
-    print(goal)
 
     if goal.command=="home":
       print("to home")
       self.MG.go_to_joint_state(j1=0,j2=0.6928,j3=0.9398)
       self.server.set_succeeded()
     elif goal.command=="position":
+      print("position")
       self.MG.go_to_pose_goal(goal.goal)
       real_pose=self.MG.move_group.get_current_pose().pose
       self._result.result.real_goal=real_pose

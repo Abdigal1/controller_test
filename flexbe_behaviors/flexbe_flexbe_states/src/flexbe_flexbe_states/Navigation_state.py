@@ -20,13 +20,14 @@ import geometry_msgs
 
 class NavigationActionState(EventState):
 	def __init__(self,positional_error):
-		super(NavigationActionState, self).__init__(outcomes = ['target_detected','command_error'],
-												 input_keys = ['pose_goal'],
-												 output_keys = ['position_error'])
+		super(NavigationActionState, self).__init__(outcomes = ['target_detected','next_step','end','command_error'],
+												 input_keys = ['nav_current_step_in'],
+												 output_keys = ['nav_current_step_out'])
 
 		self._positional_error = positional_error
 		self.interrupt_navigation=False
 		self.step=0
+		self.goal_step=False
 		self._topic = 'move_base'
 		self._topic_report = 'report_target_position'
 		self._topic_sig = 'generate_signal'
@@ -37,20 +38,18 @@ class NavigationActionState(EventState):
 		self._error = False
 		self.rate = rospy.Rate(0.2)
 		#                          x,y,z_r,w
-		self.trajectory=np.array([[1,0,0,1],
-                                    [2,0,0,1],
-                                    [3,0,0,1],
-                                    [3,1,0,1],
-                                    [2,1,0,1],
-                                    [1,1,0,1],
-                                    [0,1,0,1],
-                                    [1,1,0,1],
-                                    [2,1,0,1],
-                                    [3,1,0,1],
-                                    [3,2,0,1],
-                                    [2,2,0,1],
-                                    [1,2,0,1],
-                                    [0,2,0,1],
+		self.trajectory=np.array([[1,-0.5,0,1],
+									[11.5,-0.5,0,1],
+                                    [11.5,-1.5,0,1],
+									[1,-1.5,0,-1],
+									[1,-2.5,0,-1],
+									[11.5,-2.5,0,1],
+									[11.5,-3.5,0,1],
+                                    [1,-3.5,0,-1],
+									[1,-4.5,0,-1],
+									[11.5,-4.5,0,1],
+									[11.5,-5.5,0,1],
+                                    [1,-5.5,0,-1],
                                     ])
         
 
@@ -59,78 +58,82 @@ class NavigationActionState(EventState):
 		if self._error:
 			return 'command_error'
 
-		#GenSig=GenericSignalGoal()
-		#GenSig.req=True
-		#self.rate.sleep()
-		#self.rate.sleep()
-
 		pose_goal=target_position_reportGoal()
 		pose_goal.req=True
 
 		self._client.send_goal(self._topic_report, pose_goal)
 
-		#self._client.send_goal(self._topic_sig, GenSig) #Sim
-		#self.rate.sleep()
-
-		#print("has result:")
-		#print(self._client.has_result(self._topic_sig))
-		#if self._client_sig.has_result(self._topic_sig):
-		#	print("new result!")
-		#	result = self._client_sig.get_result(self._topic_sig) #Sim
-		#	print("result")
-		#	print(result)
-		#	self.interrupt_navigation = result.done
-		#print(self._client.has_result(self._topic_report))
-		#self.rate.sleep()
 		client=self._client._clients.get(self._topic_report)
-		print("wating")
 		client.wait_for_result()
-		print("result ready")
+		print("result")
 		result = self._client.get_result(self._topic_report)
-		#if self._client.has_result(self._topic_report):
 		if result.range:
 			print("new result!")
-			#result = self._client.get_result(self._topic_report)
-			#print("result")
-			#print(result)
 			self.interrupt_navigation = True
+		elif self.goal_step==True:
+			if self.step<11:
+				print("next")
+				self.step=self.step+1
+				return 'next_step'
+			else:
+				print("fin")
+				return 'end'
+			
+			self.goal_step=False
 
 		if self.interrupt_navigation==True:
 			print("aborting")
 			self._client.cancel(self._topic)
 			print("cancled goal")
 			self.interrupt_navigation = False
+			#userdata.step=self.step
+			userdata.nav_current_step_out=self.step
 			return 'target_detected'
 		
 
 
 
 	def on_enter(self, userdata):
+		#self.step=userdata.nav_current_step_in
 		goal = MoveBaseGoal()
-		print(goal)
 		goal.target_pose.header.frame_id = "map"
 		goal.target_pose.header.stamp = rospy.Time.now()
-		#goal.target_pose.pose.position.x = self.trajectory[self.step,0]
-		#goal.target_pose.pose.position.y = self.trajectory[self.step,1]
-		#goal.target_pose.pose.orientation.z = self.trajectory[self.step,2]
-		#goal.target_pose.pose.orientation.w = self.trajectory[self.step,3]
+		goal.target_pose.pose.position.x = self.trajectory[self.step,0]
+		goal.target_pose.pose.position.y = self.trajectory[self.step,1]
+		goal.target_pose.pose.orientation.z = self.trajectory[self.step,2]
+		goal.target_pose.pose.orientation.w = self.trajectory[self.step,3]
 
-		goal.target_pose.pose.position.x = 11.5
-		goal.target_pose.pose.position.y = -0.5
-		goal.target_pose.pose.orientation.z =0 
-		goal.target_pose.pose.orientation.w = 1
+		#goal.target_pose.pose.position.x = 11.5
+		#goal.target_pose.pose.position.y = -0.5
+		#goal.target_pose.pose.orientation.z =0 
+		#goal.target_pose.pose.orientation.w = 1
 		self._error = False
 		try:
 			self._client.send_goal(self._topic, goal)
-			#self._client_pos.wait_for_result()
-			self.rate.sleep()
+			print("paso")
+			print(self.step)
+			client=self._client._clients.get(self._topic)
+			client.wait_for_result()
+			print("goal")
+			self.goal_step=True
+			if self.step<11:
+				print("next")
+				return 'next_step'
+			else:
+				print("fin")
+				return 'end'
+
 		except Exception as e:
 			Logger.logwarn('Failed to send the Position command:\n%s' % str(e))
 			self._error = True
 
 
 	def on_exit(self, userdata):
-
+		print("EXIT")
+		#self.step=self.step+1
+		userdata.nav_current_step_out=self.step
+		print(self.step)
+		userdata.nav_current_step_out=self.step
 		if not self._client.has_result(self._topic):
 			self._client.cancel(self._topic)
 			Logger.loginfo('Cancelled active action goal.')

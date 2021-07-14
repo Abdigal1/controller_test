@@ -11,7 +11,7 @@ import geometry_msgs
 
 class InitActionState(EventState):
 	def __init__(self):
-		super(InitActionState, self).__init__(outcomes = ['ready','command_error'],input_keys = [],output_keys = [])
+		super(InitActionState, self).__init__(outcomes = ['ready','command_error'])
 		self._topic = 'to_position'
 		self._client = ProxyActionClient({self._topic: PositionAction})
 		self._error = False
