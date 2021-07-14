@@ -96,7 +96,7 @@ class image_converter:
       M = cv2.moments(cnt)
       cx = int(M['m10']/M['m00'])
       cy = int(M['m01']/M['m00'])
-      ix =cx + cy*480 #
+      ix =cx + cy*640 #
       #rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
       self.target_position=self.depth_image[ix]
 
@@ -113,7 +113,7 @@ class Report_position_server(object):
     self.server = actionlib.SimpleActionServer('report_target_position', target_position_reportAction, self.execute, False)
     self.server.start()
     self.ic = image_converter()
-    self.th=0.7
+    self.th=0.2
     
 
   def execute(self, goal):
@@ -135,7 +135,7 @@ class Report_position_server(object):
         print("distance")
         print(np.linalg.norm(self.ic.target_position))
         print("TARGET OUT OF RANGE")
-        print(self._result.result)
+        print(self._result.result.real_goal.position)
     else:
       print("NO TARGET")
     #self.server.set_succeeded(self._result)

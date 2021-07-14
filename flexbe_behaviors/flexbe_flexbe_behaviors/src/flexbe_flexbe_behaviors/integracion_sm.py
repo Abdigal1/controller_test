@@ -47,8 +47,8 @@ class IntegracionSM(Behavior):
 	def create(self):
 		# x:834 y:71, x:854 y:422
 		_state_machine = OperatableStateMachine(outcomes=['finished', 'failed'])
-		_state_machine.userdata.Step_A = 0
-		_state_machine.userdata.Step_B = 0
+		_state_machine.userdata.Step_A = 1
+		_state_machine.userdata.Step_B = 1
 
 		# Additional creation code can be added inside the following tags
 		# [MANUAL_CREATE]

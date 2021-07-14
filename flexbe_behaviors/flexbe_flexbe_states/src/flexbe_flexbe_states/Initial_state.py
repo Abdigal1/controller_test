@@ -17,6 +17,10 @@ class InitActionState(EventState):
 		self._error = False
 		self.rate = rospy.Rate(1)
 	def execute(self, userdata):
+		client=self._client._clients.get(self._topic)
+		print("wating")
+		client.wait_for_result()
+		print("result ready")
 		if self._error:
 			return 'command_error'
 		else:

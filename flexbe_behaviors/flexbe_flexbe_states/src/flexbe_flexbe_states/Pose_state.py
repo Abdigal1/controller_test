@@ -37,18 +37,18 @@ class PositionActionState(EventState):
 		#self._client = ProxyActionClient({self._topic: PositionAction,self._topic_pos: RandomPositionAction})
 		self._error = False
 		self.rate = rospy.Rate(0.2)
-		self.trajectory=np.array([[1,-0.5,0,1],
-									[11.5,-0.5,0,1],
-                                    [11.5,-1.5,0,1],
-									[1,-1.5,0,1],
-									[1,-2.5,0,1],
-									[11.5,-2.5,0,1],
-									[11.5,-3.5,0,1],
-                                    [1,-3.5,0,1],
-									[1,-4.5,0,1],
-									[11.5,-4.5,0,1],
-									[11.5,-5.5,0,1],
-                                    [1,-5.5,0,1],
+		self.trajectory=np.array([[1,-0.5,1,2*np.pi],
+									[11.5,-0.5,1,2*np.pi],
+                                    [11.5,-1.5,1,0],
+									[1,-1.5,1,0],
+									[1,-2.5,1,np.pi],
+									[11.5,-2.5,1,np.pi],
+									[11.5,-3.5,1,0],
+                                    [1,-3.5,1,0],
+									[1,-4.5,1,np.pi],
+									[11.5,-4.5,1,np.pi],
+									[11.5,-5.5,1,0],
+                                    [1,-5.5,1,0],
                                     ])
 	def execute(self, userdata):
 		if self._error:

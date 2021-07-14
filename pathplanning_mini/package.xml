@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>pathplanning</name>
+  <name>pathplanning_mini</name>
   <version>0.0.0</version>
-  <description>The pathplanning package</description>
+  <description>The pathplanning_mini package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->

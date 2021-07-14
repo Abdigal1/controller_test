@@ -40,16 +40,16 @@ class NavigationActionState(EventState):
 		#                          x,y,z_r,w
 		self.trajectory=np.array([[1,-0.5,0,1],
 									[11.5,-0.5,0,1],
-                                    [11.5,-1.5,0,1],
-									[1,-1.5,0,-1],
-									[1,-2.5,0,-1],
+                                    [11.5,-1.5,1,0],
+									[1,-1.5,1,0],
+									[1,-2.5,0,1],
 									[11.5,-2.5,0,1],
-									[11.5,-3.5,0,1],
-                                    [1,-3.5,0,-1],
-									[1,-4.5,0,-1],
+									[11.5,-3.5,1,0],
+                                    [1,-3.5,1,0],
+									[1,-4.5,0,1],
 									[11.5,-4.5,0,1],
-									[11.5,-5.5,0,1],
-                                    [1,-5.5,0,-1],
+									[11.5,-5.5,1,0],
+                                    [1,-5.5,1,0],
                                     ])
         
 
@@ -65,19 +65,28 @@ class NavigationActionState(EventState):
 
 		client=self._client._clients.get(self._topic_report)
 		client.wait_for_result()
-		print("result")
+		#print("result")
 		result = self._client.get_result(self._topic_report)
 		if result.range:
 			print("new result!")
 			self.interrupt_navigation = True
-		elif self.goal_step==True:
+
+		elif self._client.has_result(self._topic):
 			if self.step<11:
 				print("next")
 				self.step=self.step+1
 				return 'next_step'
 			else:
 				print("fin")
-				return 'end'
+				return 'end'		
+		#elif self.goal_step==True:
+		#	if self.step<11:
+		#		print("next")
+		#		self.step=self.step+1
+		#		return 'next_step'
+		#	else:
+		#		print("fin")
+		#		return 'end'
 			
 			self.goal_step=False
 
@@ -113,15 +122,15 @@ class NavigationActionState(EventState):
 			print("paso")
 			print(self.step)
 			client=self._client._clients.get(self._topic)
-			client.wait_for_result()
-			print("goal")
-			self.goal_step=True
-			if self.step<11:
-				print("next")
-				return 'next_step'
-			else:
-				print("fin")
-				return 'end'
+			#client.wait_for_result()
+			#print("goal")
+			#self.goal_step=True
+			#if self.step<11:
+			#	print("next")
+			#	return 'next_step'
+			#else:
+			#	print("fin")
+			#	return 'end'
 
 		except Exception as e:
 			Logger.logwarn('Failed to send the Position command:\n%s' % str(e))
