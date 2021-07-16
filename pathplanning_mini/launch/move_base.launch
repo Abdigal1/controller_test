@@ -3,7 +3,7 @@
    <master auto="start"/>
    
  <!-- Run the map server --> 
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find pathplanning)/config/footprint.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find pathplanning_mini)/config/footprint.yaml"/>
 
    <node pkg="amcl" type="amcl" name="amcl" output="screen">
    <!-- Publish scans from best pose at a max of 10 Hz -->
@@ -41,8 +41,8 @@
  
    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <rosparam file="$(find pathplanning)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
-    <rosparam file="$(find pathplanning)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find pathplanning)/config/local_costmap_params.yaml" command="load" />
+    <!--<rosparam file="$(find pathplanning)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />-->
+    <!--<rosparam file="$(find pathplanning)/config/local_costmap_params.yaml" command="load" />-->
     <rosparam file="$(find pathplanning)/config/global_costmap_params.yaml" command="load" /> 
     <rosparam file="$(find pathplanning)/config/base_local_planner_params.yaml" command="load" />
     <remap from="cmd_vel" to="robot/diff_drive_controller/cmd_vel"/>
