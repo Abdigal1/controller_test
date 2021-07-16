@@ -129,7 +129,7 @@ class Report_position_server(object):
     self.server = actionlib.SimpleActionServer('report_target_position', target_position_reportAction, self.execute, False)
     self.server.start()
     self.ic = image_converter()
-    self.th=0.2
+    self.th=0.6
     
 
   def execute(self, goal):
