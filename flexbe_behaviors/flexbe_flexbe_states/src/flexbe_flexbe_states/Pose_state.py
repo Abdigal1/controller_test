@@ -54,9 +54,9 @@ class PositionActionState(EventState):
 		if self._error:
 			return 'command_error'
 
-		if self._client.has_result(self._topic) and self._client.has_result(self._topic_pos):
+		if self._client.has_result(self._topic) and self._client.has_result(self._topic_report):
 			result = self._client.get_result(self._topic)
-			rand_pose = self._client.get_result(self._topic_pos)
+			rand_pose = self._client.get_result(self._topic_report)
 			print(result)
 			print(rand_pose)
 			rcoord=np.array([
@@ -71,12 +71,12 @@ class PositionActionState(EventState):
 			])
 			print(result)
 
-			userdata.position_error = np.linalg.norm(rcoord-coord)
+			#userdata.position_error = np.linalg.norm(rcoord-coord)
 			print("error posicional")
-			print(userdata.position_error)
+			#print(userdata.position_error)
 			print(self._positional_error)
 
-			if userdata.position_error < self._positional_error:
+			if np.linalg.norm(rcoord-coord) < self._positional_error:
 				return 'goal'
 			else:
 				return 'no_goal'

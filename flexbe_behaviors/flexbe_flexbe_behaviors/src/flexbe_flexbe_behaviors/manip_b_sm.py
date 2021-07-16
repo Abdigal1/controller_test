@@ -8,6 +8,7 @@
 ###########################################################
 
 from flexbe_core import Behavior, Autonomy, OperatableStateMachine, ConcurrencyContainer, PriorityContainer, Logger
+from flexbe_flexbe_states.Initial_state import InitActionState
 from flexbe_flexbe_states.Pose_state import PositionActionState
 # Additional imports can be added inside the following tags
 # [MANUAL_IMPORT]
@@ -55,7 +56,13 @@ class Manip_bSM(Behavior):
 
 
 		with _state_machine:
-			# x:206 y:100
+			# x:160 y:54
+			OperatableStateMachine.add('Inicio',
+										InitActionState(),
+										transitions={'ready': 'Position', 'command_error': 'failed'},
+										autonomy={'ready': Autonomy.Off, 'command_error': Autonomy.Off})
+
+			# x:377 y:194
 			OperatableStateMachine.add('Position',
 										PositionActionState(positional_error=0.1, shift=0.3),
 										transitions={'goal': 'finished', 'no_goal': 'Position', 'out_of_range': 'finished', 'command_error': 'failed'},
