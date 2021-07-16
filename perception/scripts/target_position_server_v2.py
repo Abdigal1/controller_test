@@ -102,7 +102,8 @@ class image_converter:
       br1 = cv2.boundingRect(max_cont[-1])
       cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
       (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (0, 255, 0), 2)
-      cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
+      #cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
+      cv2.imshow("Image window", self.cv_image)
       cv2.waitKey(3)
 
 
