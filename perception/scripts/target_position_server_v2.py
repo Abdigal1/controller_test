@@ -32,6 +32,7 @@ class image_converter:
     self.cv_image = None
     self.depth_image = None
     self.flag = True
+    self.target_position=np.zeros((1,3))
     ts = message_filters.TimeSynchronizer([self.image_sub, self.depth_sub], 50)
     ts.registerCallback(self.callback)
 
@@ -54,6 +55,12 @@ class image_converter:
       self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
       self.depth_image = np.array(list(point_cloud2.read_points(ddata, field_names=("x", "y", "z"), skip_nans=False)))
       self.depth_image=self.depth_image.reshape(self.cv_image.shape)
+      #RECORTE
+      t=self.cv_image.shape[1]
+      frac=2
+      self.cv_image=self.cv_image[:,np.hstack((np.arange(0,int(t/frac)),np.arange(int((frac-1)*t/frac),t-1))),:]
+      self.depth_image=self.depth_image[:,np.hstack((np.arange(0,int(t/frac)),np.arange(int((frac-1)*t/frac),t-1))),:]
+      self.cv_image = np.ascontiguousarray(self.cv_image, dtype=np.uint8)
       
       
     except CvBridgeError as e:
@@ -64,7 +71,6 @@ class image_converter:
     if self.flag:
       cv2.imwrite('/home/lambda/Downloads/avr.jpg', self.cv_image)
       self.flag  = False
-
     hsv = cv2.cvtColor(self.cv_image, cv2.COLOR_BGR2HSV)
     _, thresh1 = cv2.threshold(self.cv_image[:, :, 0], 0, 256, cv2.THRESH_BINARY)  #R
     _, thresh4 = cv2.threshold(hsv[:, :, 1], 254, 355, cv2.THRESH_BINARY)          #S 
@@ -84,8 +90,7 @@ class image_converter:
     #Visualization
     for i in range(val):
       br1 = cv2.boundingRect(max_cont[-(i+1)])
-      cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
-          (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
+      cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])),(int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
     contours=np.array(contours)
     if len(max_cont)>0:
       #contour_filt=self.get_image_points(self.depth_image,rthresh,contours[0])
@@ -94,7 +99,6 @@ class image_converter:
       else:
         contour_filt=np.vectorize(pyfunc=self.get_image_points,signature='(x,y,z),(q,w),(b,c,e)->(f)')(self.depth_image,rthresh,contours)
       self.target_position=contour_filt[np.argmin(np.linalg.norm(contour_filt,axis=1))]
-      print(self.target_position)
 
 
 
@@ -103,7 +107,7 @@ class image_converter:
       cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
       (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (0, 255, 0), 2)
       #cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
-      cv2.imshow("Image window", self.cv_image)
+      #cv2.imshow("Image window", self.cv_image)
       cv2.waitKey(3)
 
 
@@ -121,29 +125,39 @@ class Report_position_server(object):
     self.server = actionlib.SimpleActionServer('report_target_position', target_position_reportAction, self.execute, False)
     self.server.start()
     self.ic = image_converter()
-    self.th=0.5
+    self.th=0.3
     
 
   def execute(self, goal):
     # Do lots of awesome groundbreaking robot stuff here
     #print("execute")
-    print(goal)
+    #print(goal)
     
     if goal:
-      if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.2):
+      if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.35):
         rospy.loginfo("Target detected")
+        print(np.linalg.norm(self.ic.target_position))
         pose=geometry_msgs.msg.Pose()
-        pose.position.x=self.ic.target_position[2]
-        pose.position.y=self.ic.target_position[0]
+        #TF
+        #pose.position.x=self.ic.target_position[0]
+        #pose.position.z=self.ic.target_position[1]
+        #pose.position.y=0
+        #MANUAL
+        pose.position.x=self.ic.target_position[2]+0.221
+        pose.position.y=-self.ic.target_position[0]
+        #pose.position.x=0.4
+        #pose.position.y=0.2
         pose.position.z=0.25
+
+        #pose.position.z=self.ic.target_position[2]
         self._result.result.range=True
         self._result.result.real_goal=pose
       else:
         self._result.result.range=False
-        print("distance")
-        print(np.linalg.norm(self.ic.target_position))
+        #print("distance")
         print("TARGET OUT OF RANGE")
-        print(self._result.result.real_goal.position)
+        print(np.linalg.norm(self.ic.target_position))
+        #print(self._result.result.real_goal.position)
     else:
       print("NO TARGET")
     #self.server.set_succeeded(self._result)

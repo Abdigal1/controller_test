@@ -1,5 +1,6 @@
 <launch>
 
+
    <master auto="start"/>
    
  <!-- Run the map server --> 
@@ -38,23 +39,21 @@
    <param name="recovery_alpha_fast" value="0.0"/>
    </node>
 
- 
-  <node pkg="fake_localization" type="fake_localization" name="fake_localization" output="screen" >
-    <remap from="base_pose_ground_truth" to="odom"/>
-    <param name="global_frame_id " value="map" />
-    <param name="base_frame_id" value="base_arm"/>
     
-  </node>
-
- 
-   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+   <node   name="move_base" pkg="move_base" type="move_base" respawn="false"  output="screen">
+    <param name="controller_frequency" value="5"/>
+    <param name="planner_frequency" value="5"/>
+    <param name="base_global_planner" value="navfn/NavfnROS"/>
+    <param name="base_local_planner" value="ftc_local_planner/FTCPlanner" />
     <rosparam file="$(find pathplanning_mini)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
     <rosparam file="$(find pathplanning_mini)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
     <rosparam file="$(find pathplanning_mini)/config/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find pathplanning_mini)/config/global_costmap_params.yaml" command="load" /> 
     <rosparam file="$(find pathplanning_mini)/config/base_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find pathplanning_mini)/config/ftc_local_planner_params.yaml" command="load"/>
     <remap from="cmd_vel" to="robot/diff_drive_controller/cmd_vel"/>
-    
- </node>
 
-</launch> 
+
+    </node>
+
+</launch>

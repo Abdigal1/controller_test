@@ -117,6 +117,7 @@ class NavigationActionState(EventState):
 		if self.interrupt_navigation==True:
 			print("aborting")
 			self._client.cancel(self._topic)
+			self.rate.sleep()
 			print("cancled goal")
 			self.interrupt_navigation = False
 			#userdata.step=self.step

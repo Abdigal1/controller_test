@@ -738,7 +738,9 @@
       <robotNamespace>/robot</robotNamespace>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
+
   </gazebo>
+
 
 
   <gazebo reference="imu_link">
@@ -769,10 +771,10 @@
       <always_on>true</always_on>
       <visualize>true</visualize>             
       <camera>
-          <horizontal_fov>1.047</horizontal_fov>
+          <horizontal_fov>2.954</horizontal_fov>
           <image>
-              <width>2800</width>
-              <height>480</height>
+              <width>1000</width>
+              <height>300</height>
               <format>R8G8B8</format>
           </image>
           <depth_camera>
