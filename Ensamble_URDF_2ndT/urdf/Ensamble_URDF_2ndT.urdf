@@ -774,7 +774,7 @@
           <horizontal_fov>2.954</horizontal_fov>
           <image>
               <width>1028</width>
-              <height>40</height>
+              <height>60</height>
               <format>R8G8B8</format>
           </image>
           <depth_camera>

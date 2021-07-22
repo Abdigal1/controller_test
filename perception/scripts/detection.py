@@ -35,8 +35,8 @@ class image_converter:
   def callback(self,data, ddata):
     try:
       self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-      self.depth_image = np.array(list(point_cloud2.read_points(ddata, field_names=("x", "y", "z"), skip_nans=False)))
-      
+      #self.depth_image = np.array(list(point_cloud2.read_points(ddata, field_names=("x", "y", "z"), skip_nans=False)))
+      self.depth_image = ddata
       
     except CvBridgeError as e:
       print(e)
@@ -81,15 +81,23 @@ class image_converter:
       br1 = cv2.boundingRect(max_cont[-(i+1)])
       cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
           (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
-    if len(max_cont)>0:
-      cnt = max_cont[-1]
-      M = cv2.moments(cnt)
-      cx = int(M['m10']/M['m00'])
-      cy = int(M['m01']/M['m00'])
-      ix =cx + cy*480 #
-      print(self.depth_image[ix])
-      print(np.linalg.norm(self.depth_image[ix]))
-      rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
+
+
+    NNN = len(max_cont)
+    if NNN>0:
+      aux = []
+      for i in range(NNN):
+        cnt = max_cont[i]
+        M = cv2.moments(cnt)
+        cx = int(M['m10']/M['m00'])
+        cy = int(M['m01']/M['m00'])
+        aux.append([cx, cy])
+      #ix =cx + cy*60 #
+      avr = point_cloud2.read_points(self.depth_image, field_names=("x", "y", "z"), skip_nans=False, uvs=aux)
+      print(list(avr))
+      #print(self.depth_image[ix], cx, cy)
+      #print(np.linalg.norm(self.depth_image[ix]))
+      #rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
 
 
     cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
