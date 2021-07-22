@@ -24,7 +24,7 @@ import numpy as np
 class image_converter:
 
   def __init__(self):
-    self.image_pub = rospy.Publisher("/rgb/process_1",Image)
+    #self.image_pub = rospy.Publisher("/rgb/process_1",Image)
 
     self.bridge = CvBridge()
     self.image_sub = message_filters.Subscriber("/rgb/image_raw",Image)
@@ -85,14 +85,14 @@ class image_converter:
     _, contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     N = len(contours)
 
-    max_cont = sorted(contours, key=lambda x: cv2.contourArea(x))
-    val = min(6, N)
+    #max_cont = sorted(contours, key=lambda x: cv2.contourArea(x))
+    #val = min(6, N)
     #Visualization
-    for i in range(val):
-      br1 = cv2.boundingRect(max_cont[-(i+1)])
-      cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])),(int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
+    #for i in range(val):
+    #  br1 = cv2.boundingRect(max_cont[-(i+1)])
+    #  cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])),(int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
     contours=np.array(contours)
-    if len(max_cont)>0:
+    if N>0:
       #contour_filt=self.get_image_points(self.depth_image,rthresh,contours[0])
       if len(contours.shape)==1:
         contour_filt=np.vectorize(pyfunc=self.get_image_points,signature='(x,y,z),(q,w),()->(f)')(self.depth_image,rthresh,contours)
@@ -102,20 +102,20 @@ class image_converter:
 
 
 
-    if len(max_cont)>0:
-      br1 = cv2.boundingRect(max_cont[-1])
-      cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
-      (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (0, 255, 0), 2)
-      #cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
-      #cv2.imshow("Image window", self.cv_image)
-      cv2.waitKey(3)
+    #if len(max_cont)>0:
+    #  br1 = cv2.boundingRect(max_cont[-1])
+    #  cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
+    #  (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (0, 255, 0), 2)
+    #  #cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
+    #  #cv2.imshow("Image window", self.cv_image)
+    #  cv2.waitKey(3)
 
 
 
-    try:
-      self.image_pub.publish(self.bridge.cv2_to_imgmsg(self.cv_image, "bgr8"))
-    except CvBridgeError as e:
-      print(e)
+    #try:
+    #  self.image_pub.publish(self.bridge.cv2_to_imgmsg(self.cv_image, "bgr8"))
+    #except CvBridgeError as e:
+    #  print(e)
 
 class Report_position_server(object):
   _feedback=target_position_reportActionFeedback()
@@ -134,7 +134,7 @@ class Report_position_server(object):
     #print(goal)
     
     if goal:
-      if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.35):
+      if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.25):
         rospy.loginfo("Target detected")
         print(np.linalg.norm(self.ic.target_position))
         pose=geometry_msgs.msg.Pose()

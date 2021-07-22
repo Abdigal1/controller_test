@@ -41,18 +41,36 @@ class PositionActionState(EventState):
 		self._error = False
 		self.rate = rospy.Rate(0.2)
 		self.target_reached=False
-		self.trajectory=np.array([[1,-0.5,1,2*np.pi],
-									[11.5,-0.5,1,2*np.pi],
-                                    [11.5,-1.5,1,0],
-									[1,-1.5,1,0],
-									[1,-2.5,1,np.pi],
-									[11.5,-2.5,1,np.pi],
-									[11.5,-3.5,1,0],
-                                    [1,-3.5,1,0],
-									[1,-4.5,1,np.pi],
-									[11.5,-4.5,1,np.pi],
-									[11.5,-5.5,1,0],
-                                    [1,-5.5,1,0],
+		#self.trajectory=np.array([[1,-0.5,1,2*np.pi],
+		#							[11.5,-0.5,1,2*np.pi],
+        #                            [11.5,-1.5,1,0],
+		#							[1,-1.5,1,0],
+		#							[1,-2.5,1,np.pi],
+		#							[11.5,-2.5,1,np.pi],
+		#							[11.5,-3.5,1,0],
+        #                            [1,-3.5,1,0],
+		#							[1,-4.5,1,np.pi],
+		#							[11.5,-4.5,1,np.pi],
+		#							[11.5,-5.5,1,0],
+        #                            [1,-5.5,1,0],
+        #                            ])
+		self.trajectory=np.array([#[1,0.1,0,1],
+									#[3,0,0,1],
+									[6,0,0,1],
+									[6,-0.5,0,0.5],#Se va acercando
+									[6,-0.7, 0, 0], 
+                                   [6,-1.0,1,0],
+									[1,-1.0,1,0],
+									[0,-1.5,1,-0.5],
+									[3,-1.0,1,0],
+									[1,-2.0,0,1],
+									[6,-2.0,0,1],
+									[6,-3.0,1,0],
+                                   [1,-3.0,1,0],
+									[1,-4.0,0,1],
+									[6,-4.0,0,1],
+									[6,-5.0,1,0],
+                                   [1,-5.0,1,0],
                                     ])
 	def execute(self, userdata):
 		if self._error:
@@ -122,6 +140,7 @@ class PositionActionState(EventState):
 			print("wating")
 			client.wait_for_result()
 			print("result ready")
+			
 			rand_pose = self._client.get_result(self._topic_report)
 			if rand_pose.range:
 				Pose.command="position"
@@ -144,35 +163,48 @@ class PositionActionState(EventState):
 		if self.target_reached:
 
 			#Salida navigation
-			base_current_pose=self.tfBuffer.lookup_transform("map", 'base_arm', rospy.Time())
+			base_current_pose=self.tfBuffer.lookup_transform("odom", 'base_arm', rospy.Time())
+			print("resultado de estado actual de la base")
 			print(base_current_pose)
+
 			step=userdata.pos_current_step_in
 			print("paso guardado")
 			print(step)
 			#pt1=self.trajectory[step-1,:2]
-			#pt2=self.trajectory[step,:2]
+			pc=np.array([base_current_pose.transform.translation.x,base_current_pose.transform.translation.y])
+			pt2=self.trajectory[step,:2]
 			#l=pt2-pt1
 			#print(l)
 			#current_pt=np.array([base_current_pose.transform.translation.x,base_current_pose.transform.translation.y])
 			#print(current_pt)
 			#current_pt_proy=(np.dot(l,current_pt-pt1))*(l/np.linalg.norm(l))
 			#goal_proy=current_pt_proy+(l/np.linalg.norm(l))*self.shift
+			
 			#goal_o=goal_proy+pt1
+			goal_o=pc+(pt2-pc)/(np.linalg.norm(pt2-pc))*self.shift
+			print(goal_o)
 #
 			goal = MoveBaseGoal()
 			#print(goal)
-			goal.target_pose.header.frame_id = "map"
+			goal.target_pose.header.frame_id = "odom"
 			goal.target_pose.header.stamp = rospy.Time.now()
-			#goal.target_pose.pose.position.x = goal_o[0]
-			#goal.target_pose.pose.position.y = goal_o[1]
-			goal.target_pose.pose.position.x = base_current_pose.transform.rotation.x+0.5
-			goal.target_pose.pose.position.y = self.trajectory[step,1]
+			goal.target_pose.pose.position.x = goal_o[0]
+			goal.target_pose.pose.position.y = goal_o[1]
+			#goal.target_pose.pose.position.x = base_current_pose.transform.translation.x+0.5
+			#goal.target_pose.pose.position.y = self.trajectory[step,1]
 			goal.target_pose.pose.orientation.z = base_current_pose.transform.rotation.z
 			goal.target_pose.pose.orientation.w = base_current_pose.transform.rotation.w
 
 			
 
 			#try:
+			print("sending goal to position")
+			Pose=PositionGoal()
+			Pose.command="home"
+			self._client.send_goal(self._topic, Pose)
+			client=self._client._clients.get(self._topic)
+			print("wating")
+			client.wait_for_result()
 			print("sending goal to nav")
 			self._client.send_goal(self._topic_nav, goal)
 			client=self._client._clients.get(self._topic_nav)
@@ -183,13 +215,7 @@ class PositionActionState(EventState):
 
 			userdata.pos_current_step_out=step
 
-			print("sending goal to position")
-			Pose=PositionGoal()
-			Pose.command="home"
-			self._client.send_goal(self._topic, Pose)
-			client=self._client._clients.get(self._topic)
-			print("wating")
-			client.wait_for_result()
+
 			#except Exception as e:
 			#	Logger.logwarn('Failed to send the Position command:\n%s' % str(e))
 			#	self._error = True

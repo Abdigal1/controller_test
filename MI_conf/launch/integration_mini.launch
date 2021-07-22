@@ -146,12 +146,14 @@
       
   </node>
 
-
+<!--
   <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
     <rosparam command="load" file="$(find ensamble_mobile)/config/ekf_template.yaml" />
 
 
   </node>
+-->
+<node name="my_odom" pkg="ground_truth" type="my_odom.py" output="log"/>
 
 
 </launch>
