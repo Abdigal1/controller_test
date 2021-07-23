@@ -19,6 +19,28 @@ import tf2_geometry_msgs
 
 import tf2_ros
 
+from geometry_msgs.msg import Pose
+
+def transform_pose(input_pose, from_frame, to_frame):
+
+    # **Assuming /tf2 topic is being broadcasted
+    tf_buffer = tf2_ros.Buffer()
+    listener = tf2_ros.TransformListener(tf_buffer)
+
+    pose_stamped = tf2_geometry_msgs.PoseStamped()
+    pose_stamped.pose = input_pose
+    pose_stamped.header.frame_id = from_frame
+    pose_stamped.header.stamp = rospy.Time.now()
+
+    try:
+        # ** It is important to wait for the listener to start listening. Hence the rospy.Duration(1)
+        output_pose_stamped = tf_buffer.transform(pose_stamped, to_frame, rospy.Duration(1))
+        return output_pose_stamped.pose
+
+    except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
+        pass
+
+
 class PositionActionState(EventState):
 	def __init__(self,positional_error,shift=1.3):
 		super(PositionActionState, self).__init__(outcomes = ['goal','no_goal','out_of_range','command_error'],
@@ -56,100 +78,120 @@ class PositionActionState(EventState):
         #                            ])
 		self.trajectory=np.array([#[1,0.1,0,1],
 									#[3,0,0,1],
-									[6,0,0,1],
-									[6,-0.5,0,0.5],#Se va acercando
-									[6,-0.7, 0, 0], 
-                                   [6,-1.0,1,0],
-									[1,-1.0,1,0],
-									[0,-1.5,1,-0.5],
-									[3,-1.0,1,0],
-									[1,-2.0,0,1],
-									[6,-2.0,0,1],
-									[6,-3.0,1,0],
-                                   [1,-3.0,1,0],
-									[1,-4.0,0,1],
-									[6,-4.0,0,1],
-									[6,-5.0,1,0],
-                                   [1,-5.0,1,0],
-                                    ])
+									[6.5, 0, 0, 1], 
+                                   [7.0, -0.5, np.sin(-np.pi/4), np.cos(-np.pi/4)],
+								   [6.5, -1, 1, 0],
+									[0.5,-1.0,1, 0],
+									[0.0,-1.5,np.sin(-np.pi/4),np.cos(-np.pi/4)],
+									[0.5,-2.0,0,1]])
+	
 	def execute(self, userdata):
 		if self._error:
 			return 'command_error'
 
-		if self._client.has_result(self._topic) and self._client.has_result(self._topic_report):
-			result = self._client.get_result(self._topic)
-			rand_pose = self._client.get_result(self._topic_report)
-			print(result)
-			print(rand_pose)
-			rcoord=np.array([
-				result.real_goal.position.x,
-				result.real_goal.position.y,
-				result.real_goal.position.z
-			])
-			coord=np.array([
-				rand_pose.real_goal.position.x,
-				rand_pose.real_goal.position.y,
-				rand_pose.real_goal.position.z
-			])
-			print(result)
-
-			#userdata.position_error = np.linalg.norm(rcoord-coord)
-			print("error posicional")
-			#print(userdata.position_error)
-			print(self._positional_error)
-
-			if np.linalg.norm(rcoord-coord) < self._positional_error:
-				self.target_reached=True
-				return 'goal'
-			else:
-				self.target_reached=False
-				return 'no_goal'
+		if self._client.has_result(self._topic) and self._client.has_result(self._topic_report) and self._client.has_result(self._topic_nav):
+			return 'goal'
+			#result = self._client.get_result(self._topic)
+			#rand_pose = self._client.get_result(self._topic_report)
+			#pose_stamped = tf2_geometry_msgs.PoseStamped()
+			#pose_stamped.pose = rand_pose.real_goal
+			#pose_stamped.header.frame_id = "optical"
+    		##pose_stamped.header.stamp = rospy.Time.now()
+			#target_pose=self.tfBuffer.transform(pose_stamped, 'base_arm', rospy.Duration(0.5))
+			#target_pose.pose.position.z=0.25
+#
+			#print(result)
+			#print(rand_pose)
+			#rcoord=np.array([
+			#	result.real_goal.position.x,
+			#	result.real_goal.position.y,
+			#	result.real_goal.position.z
+			#])
+			#coord=np.array([
+			#	target_pose.pose.position.x,
+			#	target_pose.pose.position.y,
+			#	target_pose.pose.position.z
+			#])
+			#print(result)
+#
+			##userdata.position_error = np.linalg.norm(rcoord-coord)
+			#print("error posicional")
+			##print(userdata.position_error)
+			#print(self._positional_error)
+#
+			#if np.linalg.norm(rcoord-coord) < self._positional_error:
+			#	self.target_reached=True
+			#	return 'goal'
+			#else:
+			#	self.target_reached=False
+			#	return 'no_goal'
 
 	def on_enter(self, userdata):
 		print("ENTER")
-		#print(userdata.pose_goal)
-
-		#Pose_goal = userdata.Pose
 
 		Pose=PositionGoal()
-		#Pose.goal = Pose_goal
-
-		#Randgen=RandomPositionGoal() #Sim
-		#Randgen.req=True			 #Sim
 
 		pose_goal=target_position_reportGoal()
 		pose_goal.req=True
 		self._client.send_goal(self._topic_report, pose_goal)
 
 		self._error = False
-		#try:
-		#	self._client_pos.send_goal(self._topic_pos, Randgen)
-		#	self.rate.sleep()
-		#	self.rate.sleep()
-		#	#if self._client_pos.has_result(self._topic_pos):
-		#	rand_pose = self._client_pos.get_result(self._topic_pos)
-		#	Pose.command="position"
-		#	Pose.goal = rand_pose.real_goal
-		#	self._client.send_goal(self._topic, Pose)
-		#except Exception as e:
-		#	Logger.logwarn('Failed to send the Position command:\n%s' % str(e))
-		#	self._error = True
 
 		try:
 			client=self._client._clients.get(self._topic_report)
 			print("wating")
 			client.wait_for_result()
 			print("result ready")
-			
+
 			rand_pose = self._client.get_result(self._topic_report)
+			#TF optical to global
+
+			#target_pose=transform_pose(rand_pose.real_goal,"optical","odom")
+			pose_stamped = tf2_geometry_msgs.PoseStamped()
+			pose_stamped.pose = rand_pose.real_goal
+			pose_stamped.header.frame_id = "optical"
+    		#pose_stamped.header.stamp = rospy.Time.now()
+			target_pose=self.tfBuffer.transform(pose_stamped, 'odom', rospy.Duration(0.5))
+
+			#Move_base
+			#base_current_pose=self.tfBuffer.lookup_transform("odom", 'base_arm', rospy.Time())
+			goal = MoveBaseGoal()
+			#print(goal)
+			self.step=userdata.pos_current_step_in
+			print("paso")
+			print(self.step)
+			goal.target_pose.header.frame_id = "odom"
+			goal.target_pose.header.stamp = rospy.Time.now()
+			goal.target_pose.pose.position.x = target_pose.pose.position.x
+			goal.target_pose.pose.position.y = self.trajectory[self.step,1]
+			#goal.target_pose.pose.position.x = base_current_pose.transform.translation.x+0.5
+			#goal.target_pose.pose.position.y = self.trajectory[self.step,1]
+			goal.target_pose.pose.orientation.z = self.trajectory[self.step,2]
+			goal.target_pose.pose.orientation.w = self.trajectory[self.step,3]
+
+			self._client.send_goal(self._topic_nav, goal)
+			client=self._client._clients.get(self._topic_nav)
+
+			client.wait_for_result()
+
+			#target_pose=transform_pose(target_pose,"odom","base_arm")
+
+			pose_stamped = tf2_geometry_msgs.PoseStamped()
+
+			pose_stamped.pose = target_pose.pose
+
+			pose_stamped.header.frame_id = "odom"
+    		#pose_stamped.header.stamp = rospy.Time.now()
+
+
+			target_pose=self.tfBuffer.transform(pose_stamped, 'base_arm', rospy.Duration(0.5))
+
+			target_pose.pose.position.z=0.25
+
+
 			if rand_pose.range:
 				Pose.command="position"
-				#pose_stamped = tf2_geometry_msgs.PoseStamped()
-				#pose_stamped.pose = rand_pose.real_goal
-				#pose_stamped.header.frame_id = "optical"
-				#pose_stamped.header.stamp = rospy.Time.now()
-				#output_pose_stamped = self.tf_buffer.transform(pose_stamped, "base_arm", rospy.Duration(1))
-				Pose.goal = rand_pose.real_goal
+				Pose.goal = target_pose.pose
 				self._client.send_goal(self._topic, Pose)
 			else:
 				return 'out_of_range'
@@ -160,43 +202,8 @@ class PositionActionState(EventState):
 
 	def on_exit(self, userdata):
 		print("EXIT")
-		if self.target_reached:
-
-			#Salida navigation
-			base_current_pose=self.tfBuffer.lookup_transform("odom", 'base_arm', rospy.Time())
-			print("resultado de estado actual de la base")
-			print(base_current_pose)
-
-			step=userdata.pos_current_step_in
-			print("paso guardado")
-			print(step)
-			#pt1=self.trajectory[step-1,:2]
-			pc=np.array([base_current_pose.transform.translation.x,base_current_pose.transform.translation.y])
-			pt2=self.trajectory[step,:2]
-			#l=pt2-pt1
-			#print(l)
-			#current_pt=np.array([base_current_pose.transform.translation.x,base_current_pose.transform.translation.y])
-			#print(current_pt)
-			#current_pt_proy=(np.dot(l,current_pt-pt1))*(l/np.linalg.norm(l))
-			#goal_proy=current_pt_proy+(l/np.linalg.norm(l))*self.shift
-			
-			#goal_o=goal_proy+pt1
-			goal_o=pc+(pt2-pc)/(np.linalg.norm(pt2-pc))*self.shift
-			print(goal_o)
-#
-			goal = MoveBaseGoal()
-			#print(goal)
-			goal.target_pose.header.frame_id = "odom"
-			goal.target_pose.header.stamp = rospy.Time.now()
-			goal.target_pose.pose.position.x = goal_o[0]
-			goal.target_pose.pose.position.y = goal_o[1]
-			#goal.target_pose.pose.position.x = base_current_pose.transform.translation.x+0.5
-			#goal.target_pose.pose.position.y = self.trajectory[step,1]
-			goal.target_pose.pose.orientation.z = base_current_pose.transform.rotation.z
-			goal.target_pose.pose.orientation.w = base_current_pose.transform.rotation.w
-
-			
-
+		#if self.target_reached:
+		if True:
 			#try:
 			print("sending goal to position")
 			Pose=PositionGoal()
@@ -205,15 +212,10 @@ class PositionActionState(EventState):
 			client=self._client._clients.get(self._topic)
 			print("wating")
 			client.wait_for_result()
-			print("sending goal to nav")
-			self._client.send_goal(self._topic_nav, goal)
-			client=self._client._clients.get(self._topic_nav)
-			print("wating")
-			client.wait_for_result()
 			print("paso")
-			print(step)
+			print(self.step)
 
-			userdata.pos_current_step_out=step
+			userdata.pos_current_step_out=self.step
 
 
 			#except Exception as e:

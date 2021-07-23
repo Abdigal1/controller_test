@@ -59,23 +59,12 @@ class NavigationActionState(EventState):
 
 		self.trajectory=np.array([#[1,0.1,0,1],
 									#[3,0,0,1],
-									[6,0,0,1],
-									[6,-0.5,0,0.5],#Se va acercando
-									[6,-0.7, 0, 0], 
-                                   [6,-1.0,1,0],
-									[1,-1.0,1,0],
-									[0,-1.5,1,-0.5],
-									[3,-1.0,1,0],
-									[1,-2.0,0,1],
-									[6,-2.0,0,1],
-									[6,-3.0,1,0],
-                                   [1,-3.0,1,0],
-									[1,-4.0,0,1],
-									[6,-4.0,0,1],
-									[6,-5.0,1,0],
-                                   [1,-5.0,1,0],
-                                    ])
-        
+									[6.5, 0, 0, 1], 
+                                   [7.0, -0.5, np.sin(-np.pi/4), np.cos(-np.pi/4)],
+								   [6.5, -1, 1, 0],
+									[0.5,-1.0,1, 0],
+									[0.0,-1.5,np.sin(-np.pi/4),np.cos(-np.pi/4)],
+									[0.5,-2.0,0,1]])
 
 
 	def execute(self, userdata):
@@ -130,7 +119,7 @@ class NavigationActionState(EventState):
 	def on_enter(self, userdata):
 		#self.step=userdata.nav_current_step_in
 		goal = MoveBaseGoal()
-		goal.target_pose.header.frame_id = "map"
+		goal.target_pose.header.frame_id = "odom"
 		goal.target_pose.header.stamp = rospy.Time.now()
 		goal.target_pose.pose.position.x = self.trajectory[self.step,0]
 		goal.target_pose.pose.position.y = self.trajectory[self.step,1]

@@ -12,6 +12,7 @@ Panels:
         - /Map2
         - /Pose1
         - /PointCloud21
+        - /PoseArray1
       Splitter Ratio: 0.5
     Tree Height: 485
   - Class: rviz/Selection
@@ -204,6 +205,8 @@ Visualization Manager:
           Value: true
         imu_link:
           Value: true
+        map:
+          Value: true
         odom:
           Value: true
         optical:
@@ -220,6 +223,8 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
+        map:
+          {}
         odom:
           base_arm:
             Link_2_Arm:
@@ -298,11 +303,27 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
+    - Alpha: 1
+      Arrow Length: 0.30000001192092896
+      Axes Length: 0.30000001192092896
+      Axes Radius: 0.009999999776482582
+      Class: rviz/PoseArray
+      Color: 255; 25; 0
+      Enabled: true
+      Head Length: 0.07000000029802322
+      Head Radius: 0.029999999329447746
+      Name: PoseArray
+      Shaft Length: 0.23000000417232513
+      Shaft Radius: 0.009999999776482582
+      Shape: Arrow (Flat)
+      Topic: /particlecloud
+      Unreliable: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: odom
+    Fixed Frame: base_arm
     Frame Rate: 30
   Name: root
   Tools:
@@ -326,25 +347,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.233966827392578
+      Distance: 5.131354331970215
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 2.8215203285217285
-        Y: -0.0990714505314827
-        Z: 2.2895004749298096
+        X: -0.11762723326683044
+        Y: -0.10588888823986053
+        Z: -0.4729958176612854
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.2653975784778595
+      Pitch: 1.030397653579712
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.3803961277008057
+      Yaw: 2.895395278930664
     Saved: ~
 Window Geometry:
   Displays:

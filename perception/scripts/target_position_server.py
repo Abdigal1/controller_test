@@ -32,16 +32,18 @@ class image_converter:
     self.cv_image = None
     self.depth_image = None
     self.flag = True
+    self.target_position=np.ones((1,3))*1000
     ts = message_filters.TimeSynchronizer([self.image_sub, self.depth_sub], 50)
     ts.registerCallback(self.callback)
+
+
 
 
   def callback(self,data, ddata):
     try:
       self.cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-      self.depth_image = np.array(list(point_cloud2.read_points(ddata, field_names=("x", "y", "z"), skip_nans=False)))
-      self.depth_image=self.depth_image.reshape(self.cv_image.shape)
-      
+      #self.depth_image = np.array(list(point_cloud2.read_points(ddata, field_names=("x", "y", "z"), skip_nans=False)))
+      self.depth_image = ddata
       
     except CvBridgeError as e:
       print(e)
@@ -55,18 +57,13 @@ class image_converter:
 
     hsv = cv2.cvtColor(self.cv_image, cv2.COLOR_BGR2HSV)
 
-    #_, thresh1 = cv2.threshold(self.cv_image[:, :, 0], 0, 30, cv2.THRESH_BINARY)  #R
-    #_, thresh2 = cv2.threshold(self.cv_image[:, :, 1], 200, 256, cv2.THRESH_BINARY)#G
-    #_, thresh3 = cv2.threshold(self.cv_image[:, :, 2], 0, 10, cv2.THRESH_BINARY) #B
-    #_, thresh4 = cv2.threshold(hsv[:, :, 1], 200, 255, cv2.THRESH_BINARY)          #S 
-    #rthresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
-
     _, thresh1 = cv2.threshold(self.cv_image[:, :, 0], 0, 256, cv2.THRESH_BINARY)  #R
     _, thresh2 = cv2.threshold(self.cv_image[:, :, 1], 0, 256, cv2.THRESH_BINARY)#G
     _, thresh3 = cv2.threshold(self.cv_image[:, :, 2], 0, 256, cv2.THRESH_BINARY) #B
     _, thresh4 = cv2.threshold(hsv[:, :, 1], 254, 355, cv2.THRESH_BINARY)          #S 
     _, thresh5 = cv2.threshold(hsv[:, :, 2], 230, 355, cv2.THRESH_BINARY)          #V 
-
+    #rthresh = cv2.bitwise_and(cv2.bitwise_and(thresh1, thresh2), cv2.bitwise_and(thresh3, thresh4))
+    rthresh = cv2.bitwise_not(thresh1)
     rthresh = cv2.bitwise_and(thresh5,cv2.bitwise_not(thresh1))
 
 
@@ -81,40 +78,42 @@ class image_converter:
     # Find contours:
     _, contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     N = len(contours)
+    #rospy.loginfo("%d %d %d", N, self.depth_image.shape[0], self.depth_image.shape[1])
     max_cont = sorted(contours, key=lambda x: cv2.contourArea(x))
+    # Draw contours:
+    #cv2.drawContours(a, max_cont, N-1, (255, 0, 0), 2)
+    #cv2.drawContours(a, max_cont, N-2, (255, 0, 0), 2)
     val = min(6, N)
-    #Visualization
     for i in range(val):
       br1 = cv2.boundingRect(max_cont[-(i+1)])
       cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
           (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (255, 0, 0), 2)
 
-    if len(max_cont)>0:
-      br1 = cv2.boundingRect(max_cont[-1])
-      cv2.rectangle(self.cv_image, (int(br1[0]), int(br1[1])), \
-      (int(br1[0]+br1[2]), int(br1[1]+br1[3])), (0, 255, 0), 2)
-      cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
-      cv2.waitKey(3)
-    
-    #By moments
-    if len(max_cont)>0:
-      cnt = max_cont[-1]
-      M = cv2.moments(cnt)
-      cx = int(M['m10']/M['m00'])
-      cy = int(M['m01']/M['m00'])
-      ix =cx + cy*640 #
-      #rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
-      self.target_position=self.depth_image[ix]
 
-    #By bits
-    if len(max_cont)>0:
-      cnt = max_cont[-1]
-      M = cv2.moments(cnt)
-      cx = int(M['m10']/M['m00'])
-      cy = int(M['m01']/M['m00'])
-      ix =cx + cy*640 #
+    NNN = len(max_cont)
+    if NNN>0:
+      aux = []
+      for i in range(NNN):
+        cnt = max_cont[i]
+        M = cv2.moments(cnt)
+        cx = int(M['m10']/M['m00'])
+        cy = int(M['m01']/M['m00'])
+        aux.append([cx, cy])
+      #ix =cx + cy*60 #
+      points = np.array(list(point_cloud2.read_points(self.depth_image, field_names=("x", "y", "z"), skip_nans=False, uvs=aux)))
+      self.target_position=points[np.argmin(np.linalg.norm(points,axis=1))]
+      #print(list(avr))
+      #print(self.depth_image[ix], cx, cy)
+      #print(np.linalg.norm(self.depth_image[ix]))
       #rospy.loginfo("%f %f %f %d %d", self.depth_image[ix][0], self.depth_image[ix][1], self.depth_image[ix][2], cx, cy)
-      self.target_position=self.depth_image[ix]
+
+
+    cv2.imshow("Image window", np.hstack((cv2.bitwise_and(self.cv_image,self.cv_image, mask= rthresh), self.cv_image)))
+    #cv2.imshow("Image window", cv2.bitwise_and(self.cv_image,self.cv_image, mask= thresh))
+    #cv2.imshow("Image window", self.cv_image)
+    #cv2.imshow("Image window", np.hstack((np.dstack((self.sdepth_image, np.zeros_like(self.sdepth_image), np.zeros_like(self.sdepth_image))), self.cv_image)))
+    #cv2.imshow("Ra", self.depth_image)
+    cv2.waitKey(3)
 
     try:
       self.image_pub.publish(self.bridge.cv2_to_imgmsg(self.cv_image, "bgr8"))
@@ -138,12 +137,13 @@ class Report_position_server(object):
     print(goal)
     
     if goal:
-      if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.2):
+      #if np.linalg.norm(self.ic.target_position)<self.th and np.linalg.norm(self.ic.target_position)>(self.th-0.2):
+      if np.linalg.norm(self.ic.target_position)<self.th and abs(self.ic.target_position[0])<0.45:
         rospy.loginfo("Target detected")
         pose=geometry_msgs.msg.Pose()
         pose.position.x=self.ic.target_position[0]
         pose.position.y=self.ic.target_position[1]
-        pose.position.z=0.25
+        pose.position.z=self.ic.target_position[2]
         self._result.result.range=True
         self._result.result.real_goal=pose
       else:
