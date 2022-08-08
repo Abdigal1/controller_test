@@ -2,8 +2,8 @@
 
 # TODO list:
 
-[ ] purpose images, gifs, etc.
-[ ] Add complete behavior gifs
+- [ ] purpose images, gifs, etc.
+- [ ] Add complete behavior gifs
 
 #Launch instructions
 
